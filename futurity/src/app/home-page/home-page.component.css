@@ -1,0 +1,29 @@
+.navbar-dark {
+  border-bottom: 2px solid #FFFF00;
+  background: #232129;
+}
+
+.navbar-brand-name {
+  color: #FFFF00;
+  font-size: 32px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.btn {
+  min-width: 120px;
+  border-radius: 0;
+  margin-right: 10px;
+  border-color: #FFFF00;
+  color: #FFFF00;
+  font-weight: bolder;
+  box-shadow: none;
+}
+
+.btn:hover {
+  color: #232129;
+  background: #FFFF00;
+  transition: .6s;
+}
