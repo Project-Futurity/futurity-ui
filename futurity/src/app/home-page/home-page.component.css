@@ -1,5 +1,4 @@
 .navbar-dark {
-  border-bottom: 2px solid #FFFF00;
   background: #232129;
 }
 
@@ -131,9 +130,21 @@ input:valid ~ .term {
   margin-left: 50px;
 }
 
+.sub-content-image-width {
+  width: 100px;
+}
+
+.sub-content-text {
+  color: #FFFF00;
+  font-size: 22px;
+}
+
 .content-container {
-  border-bottom: 2px solid #FFFF00;
   padding-bottom: 30px;
+}
+
+.yellow-border-bottom {
+  border-bottom: 2px solid #FFFF00;
 }
 
 @media (max-width: 1140px) {
@@ -148,15 +159,22 @@ input:valid ~ .term {
   .content-container {
     padding-bottom: 50px;
   }
+
+  .sub-content-text {
+    font-size: 20px;
+  }
+
+  .sub-content-image-width {
+    width: 80px;
+  }
 }
 
 @media (max-width: 992px) {
   .email-input {
-    width: 100%;
+    width: calc(100vw - 15px);
     margin-top: 100px;
     flex-direction: column;
     align-items: center;
-    position: fixed;
   }
 
   .content-button {
