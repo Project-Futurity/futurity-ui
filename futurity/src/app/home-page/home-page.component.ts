@@ -8,10 +8,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class HomePageComponent implements OnInit {
   emailInputGroup: FormGroup;
-  disableJoinButton = false
-
-  constructor() {
-  }
+  disableJoinButton = false;
 
   ngOnInit(): void {
     this.emailInputGroup = new FormGroup({
