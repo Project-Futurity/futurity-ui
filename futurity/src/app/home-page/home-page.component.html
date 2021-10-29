@@ -31,16 +31,23 @@
         </p>
       </div>
 
-      <div class="row ml-0 ml-lg-5 mt-lg-5 email-input">
+      <form class="row ml-0 ml-lg-5 mt-lg-5 email-input" [formGroup]="emailInputGroup" (ngSubmit)="onSubmit()">
         <div class="position-relative">
-          <input type="text" required>
+          <input type="text" required formControlName="email" id="email">
           <label class="label-input">Email</label>
           <span class="bar"></span>
           <div class="term">></div>
         </div>
 
-        <button type="button" class="btn content-button">Join us</button>
-      </div>
+        <button type="submit" class="btn content-button"
+                [disabled]="emailInputGroup.invalid || disableJoinButton"
+                [ngStyle]="{
+                  'pointer-events': emailInputGroup.invalid ? 'none' : 'auto'
+                }"
+        >
+          Join us
+        </button>
+      </form>
     </div>
 
     <div class="col-5 mt-n3 d-none d-md-block">

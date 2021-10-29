@@ -1,0 +1,18 @@
+ngx-simplebar {
+  height: 100vh;
+}
+
+::ng-deep .simplebar-scrollbar:before {
+  background-color: #FFFF00 !important;
+  width: 5px;
+}
+
+::ng-deep .simplebar-scrollbar.simplebar-visible::before {
+  opacity: 0.8 !important;
+}
+
+@media (max-width: 768px) {
+  ::ng-deep .simplebar-scrollbar:before {
+    width: 3px;
+  }
+}
