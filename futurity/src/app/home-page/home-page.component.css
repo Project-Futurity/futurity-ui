@@ -2,89 +2,6 @@
   margin-top: 70px;
 }
 
-input {
-  font-size: 22px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  background: inherit;
-  color: #ccc;
-  height: 38px;
-  width: 300px;
-  padding: 0;
-}
-
-input:focus {
-  outline: none;
-}
-
-.label-input {
-  position: absolute;
-  top: 8px;
-  left: 0;
-  pointer-events: none;
-  transition: 0.2s ease all;
-  color: #999;
-  font-size: 18px;
-}
-
-input:focus ~ .label-input {
-  color: #FFFF00;
-}
-
-input:focus ~ .label-input, input:valid ~ .label-input {
-  top: -17px;
-  font-size: 14px;
-}
-
-.bar {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-
-.bar:before, .bar:after {
-  content: "";
-  height: 2px;
-  width: 0;
-  bottom: 0;
-  background: #FFFF00;
-  position: absolute;
-  transition: 0.2s ease all;
-}
-
-.bar:before {
-  left: 50%;
-}
-
-.bar:after {
-  right: 50%;
-}
-
-input:focus ~ .bar:before,
-input:focus ~ .bar:after {
-  width: 50%;
-}
-
-.term {
-  font-size: 28px;
-  color: #ccc;
-  top: 0;
-  left: -25px;
-  position: absolute;
-  cursor: default;
-  transition: .3s;
-  display: inline;
-}
-
-input:focus ~ .term {
-  color: #FFFF00;
-  left: -35px;
-}
-
-input:valid ~ .term {
-  left: -25px;
-}
-
 .content-title {
   color: #FFFF00;
   font-weight: bold;
@@ -191,7 +108,7 @@ input:valid ~ .term {
 }
 
 @media (max-width: 576px) {
-  input {
+  .terminal-input {
     width: 250px;
   }
 
