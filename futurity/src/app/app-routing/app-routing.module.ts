@@ -1,10 +1,15 @@
 import {RouterModule, Routes} from "@angular/router";
 import {HomePageComponent} from "../home-page/home-page.component";
 import {NgModule} from "@angular/core";
+import {NotLoginedLayoutComponent} from "../shared/layouts/not-logined-layout/not-logined-layout.component";
 
 
 const routes: Routes = [
-  {path: "", component: HomePageComponent}
+  {
+    path: "", component: NotLoginedLayoutComponent, children: [
+      {path: "", component: HomePageComponent}
+    ]
+  }
 ];
 
 @NgModule({
@@ -15,4 +20,5 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
