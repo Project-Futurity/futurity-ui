@@ -1,0 +1,90 @@
+.b-contain *, .b-contain *::before, .b-contain *::after {
+  box-sizing: content-box !important;
+}
+
+.b-contain input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.b-contain span {
+  line-height: 1.54;
+  font-size: 1rem;
+  color: #d1d1d1;
+}
+
+.b-contain {
+  display: table;
+  position: relative;
+  padding-left: 1.8rem;
+  cursor: pointer;
+  margin-bottom: .5rem;
+  margin-top: 10px;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.25rem;
+  width: 1.25rem;
+  background: #282c35;
+  transition: background 250ms;
+  border: 1px solid #FFFF00;
+  border-radius: 0.125rem;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: .45rem;
+  top: .18rem;
+  width: .25rem;
+  height: .6rem;
+  border: solid #282c35;
+  border-width: 0 2px 2px 0;
+  transition: background 250ms;
+  transform: rotate(45deg);
+}
+
+.b-contain input:checked ~ .b-input::after {
+  display: block;
+}
+.b-contain input:checked ~ .b-input {
+  background: #FFFF00;
+}
+
+.b-contain .b-input::before {
+  content: '';
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -0.85rem;
+  margin-top: -0.85rem;
+  background: rgba(0, 130, 243, 1);
+  border-radius: 2rem;
+  opacity: .6;
+  z-index: 99999;
+  transform: scale(0);
+}
+
+.b-contain input:checked + .b-input::before {
+  animation-name: b-ripple-duplicate;
+}
+
+.b-contain .b-input::before {
+  visibility: hidden;
+}
+
+.b-contain input:focus + .b-input::before {
+  visibility: visible;
+}
+
+.b-contain:first-child .b-input::before {
+  visibility: hidden;
+}

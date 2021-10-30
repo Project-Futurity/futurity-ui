@@ -1,0 +1,73 @@
+.card {
+  width: 450px;
+  border-radius: 20px;
+  background-color: rgb(70, 70, 70);
+  box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.164)
+}
+
+.card-title {
+  font-size: 36px;
+  font-weight: bold;
+  cursor: default;
+  color: #FFFF00;
+}
+
+.btn {
+  width: 160px;
+}
+
+.terminal-input {
+  width: 100%;
+}
+
+.input-width {
+  width: 70%;
+  margin-top: 50px;
+}
+
+.login-text {
+  color: #FFFF00;
+  font-size: 16px;
+}
+
+.login-text:hover {
+  color: #282c35;
+}
+
+@media (max-width: 992px) {
+  .card {
+    width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 350px;
+  }
+
+  .btn {
+    width: 120px;
+  }
+
+  .login-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .card {
+    width: auto;
+  }
+
+  .input-width {
+    width: 85%;
+  }
+
+  .card-title {
+    font-size: 32px;
+  }
+
+  .input-width {
+    margin-top: 30px;
+  }
+}
