@@ -1,3 +1,32 @@
+@import "styles/terminal-input.css";
+@import "styles/button.css";
+@import "styles/checkbox.css";
+
 body {
   background: #282c35;
 }
+
+.yellow-border-bottom {
+  border-bottom: 2px solid #FFFF00;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.error-message {
+  color: #860600;
+  font-size: 16px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.error-block {
+  border: 1px solid darkred;
+  width: 90%;
+  padding: 15px;
+  text-align: center;
+  color: #860600;
+  font-size: 18px;
+}
+

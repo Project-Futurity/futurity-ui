@@ -10,7 +10,7 @@ export class HomePageComponent implements OnInit {
   emailInputGroup: FormGroup;
   disableJoinButton = false;
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.emailInputGroup = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
@@ -20,7 +20,7 @@ export class HomePageComponent implements OnInit {
   }
 
   onSubmit() {
-    this.disableJoinButton = true; // disable button while request to the server
+    this.disableJoinButton = true; // disable the button while requesting to the server
 
     // submit email
   }

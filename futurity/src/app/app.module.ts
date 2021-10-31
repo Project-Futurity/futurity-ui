@@ -7,11 +7,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {AppRoutingModule} from "./app-routing/app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SimplebarAngularModule} from "simplebar-angular";
+import { NotLoginedLayoutComponent } from './shared/layouts/not-logined-layout/not-logined-layout.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent,
+    NotLoginedLayoutComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
