@@ -1,6 +1,7 @@
 @import "styles/terminal-input.css";
 @import "styles/button.css";
 @import "styles/checkbox.css";
+@import "styles/auth-card.css";
 
 body {
   background: #282c35;
