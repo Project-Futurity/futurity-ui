@@ -1,0 +1,28 @@
+.btn {
+  width: 160px;
+}
+
+.terminal-input {
+  width: 100%;
+}
+
+.input-width {
+  width: 70%;
+  margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    width: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .input-width {
+    width: 85%;
+  }
+
+  .input-width {
+    margin-top: 30px;
+  }
+}

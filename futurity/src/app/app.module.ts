@@ -9,13 +9,15 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SimplebarAngularModule} from "simplebar-angular";
 import { NotLoginedLayoutComponent } from './shared/layouts/not-logined-layout/not-logined-layout.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { RegisterEmailPageComponent } from './register-email-page/register-email-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
     NotLoginedLayoutComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    RegisterEmailPageComponent
   ],
   imports: [
     BrowserModule,
