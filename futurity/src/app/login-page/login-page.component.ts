@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../shared/services/auth.service";
+import {EmailService} from "../shared/services/email.service";
 
 @Component({
   selector: 'app-login-page',
@@ -14,14 +14,14 @@ export class LoginPageComponent implements OnInit {
   loginForm: FormGroup;
   loginError: string = null;
 
-  constructor(private auth: AuthService) {
+  constructor(private email: EmailService) {
   }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
-        Validators.pattern(this.auth.EMAIL_REGEX)
+        Validators.pattern(this.email.EMAIL_REGEX)
       ]),
       password: new FormControl(null, [
         Validators.required,

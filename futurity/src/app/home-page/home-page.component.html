@@ -9,7 +9,7 @@
         </p>
       </div>
 
-      <form class="row ml-0 ml-lg-5 mt-lg-5 email-input" [formGroup]="emailInputGroup" (ngSubmit)="onSubmit()">
+      <form class="row ml-0 ml-lg-5 mt-lg-5 email-input" [formGroup]="emailInputForm" (ngSubmit)="onSubmit()">
         <div class="position-relative">
           <input class="terminal-input" type="text" required formControlName="email" id="email">
           <label class="label-input">Email</label>
@@ -17,10 +17,10 @@
           <div class="term">></div>
         </div>
 
-        <button type="submit" class="btn content-button"
-                [disabled]="emailInputGroup.invalid || disableJoinButton"
+        <button class="btn content-button"
+                [disabled]="emailInputForm.invalid"
                 [ngStyle]="{
-                  'pointer-events': emailInputGroup.invalid ? 'none' : 'auto'
+                  'pointer-events': emailInputForm.invalid ? 'none' : 'auto'
                 }"
         >
           Join us

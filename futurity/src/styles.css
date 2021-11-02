@@ -7,6 +7,10 @@ body {
   background: #282c35;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 .yellow-border-bottom {
   border-bottom: 2px solid #FFFF00;
 }

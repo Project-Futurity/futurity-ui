@@ -1,6 +1,6 @@
 <div class="container-fluid p-4">
   <div class="card">
-    <form class="card-body d-flex flex-column align-items-center" [formGroup]="emailInputGroup" (ngSubmit)="onSubmit()">
+    <form class="card-body d-flex flex-column align-items-center" [formGroup]="emailInputForm" (ngSubmit)="onSubmit()">
       <div class="card-title mt-1 mt-sm-3 py-3">Welcome to Futurity</div>
 
       <div class="error-block mt-1 mb-4" *ngIf="emailError">{{emailError}}</div>
@@ -13,16 +13,17 @@
       </div>
 
       <button type="submit" class="btn mx-0 mt-3 mt-sm-4"
-              [disabled]="emailInputGroup.invalid || disableContinueButton"
+              [disabled]="emailInputForm.invalid || disableContinueButton"
               [ngStyle]="{
-                  'pointer-events': emailInputGroup.invalid ? 'none' : 'auto'
+                  'pointer-events': emailInputForm.invalid ? 'none' : 'auto'
                 }"
       >
         Continue
       </button>
 
-      <div class="row mt-4 mt-sm-4 auth-text cursor-pointer text-center terms">By clicking “Continue”, you agree to <br> our terms of service</div>
-      <div class="row mt-3 mb-2 auth-text cursor-pointer">Already have an account? Log in</div>
+      <a class="row mt-4 mt-sm-4 auth-text cursor-pointer text-center terms">By clicking “Continue”, you agree to <br>
+        our terms of service</a>
+      <a routerLink="/login" class="row mt-3 mb-2 auth-text cursor-pointer">Already have an account? Log in</a>
     </form>
   </div>
 </div>

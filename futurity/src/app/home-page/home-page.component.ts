@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../shared/services/auth.service";
+import {EmailService} from "../shared/services/email.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home-page',
@@ -8,24 +9,22 @@ import {AuthService} from "../shared/services/auth.service";
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-  emailInputGroup: FormGroup;
-  disableJoinButton = false;
+  emailInputForm: FormGroup;
 
-  constructor(private auth: AuthService) {
+  constructor(private email: EmailService, private router: Router) {
   }
 
   ngOnInit() {
-    this.emailInputGroup = new FormGroup({
+    this.emailInputForm = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
-        Validators.pattern(this.auth.EMAIL_REGEX)
+        Validators.pattern(this.email.EMAIL_REGEX)
       ])
     });
   }
 
   onSubmit() {
-    this.disableJoinButton = true; // disable the button while requesting to the server
-
-    // submit email
+    this.email.setEmail(this.emailInputForm.get('email').value);
+    this.router.navigate(["/singup"]);
   }
 }

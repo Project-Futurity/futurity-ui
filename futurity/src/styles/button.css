@@ -6,6 +6,12 @@
   color: #FFFF00;
   font-weight: bolder;
   box-shadow: none;
+  outline: none;
+}
+
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none;
 }
 
 .btn:hover {

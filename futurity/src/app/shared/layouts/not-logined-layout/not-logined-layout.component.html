@@ -1,6 +1,6 @@
 <div class="d-flex flex-column min-vh-100 align-items-stretch">
   <nav class="navbar navbar-expand-md navbar-dark header-footer-bg py-3 yellow-border-bottom">
-    <a class="navbar-brand d-flex align-items-center cursor-pointer" href="/">
+    <a class="navbar-brand d-flex align-items-center cursor-pointer" routerLink="/">
       <img src="assets/terminal.png" width="60" height="60" class="ml-md-4 mr-2">
       <span class="navbar-brand-name">Futurity</span>
     </a>
@@ -12,10 +12,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item mr-md-4">
-          <button type="button" class="btn col-md-12 mt-3 mt-md-0">Login</button>
+          <button routerLink="/login" class="btn col-md-12 mt-3 mt-md-0">Login</button>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn col-md-12 mt-4 mb-2 my-md-0">Sing up</button>
+          <button routerLink="/singup" class="btn col-md-12 mt-4 mb-2 my-md-0">Sing up</button>
         </li>
       </ul>
     </div>

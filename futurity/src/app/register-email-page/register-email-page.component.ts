@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../shared/services/auth.service";
+import {EmailService} from "../shared/services/email.service";
 
 @Component({
   selector: 'app-register-email-page',
@@ -8,19 +8,23 @@ import {AuthService} from "../shared/services/auth.service";
   styleUrls: ['./register-email-page.component.css']
 })
 export class RegisterEmailPageComponent implements OnInit {
-  emailInputGroup: FormGroup;
+  emailInputForm: FormGroup;
   disableContinueButton = false;
   emailError: string = null;
 
-  constructor(private auth: AuthService) {
+  constructor(private email: EmailService) {
   }
 
   ngOnInit() {
-    this.emailInputGroup = new FormGroup({
+    this.emailInputForm = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
-        Validators.pattern(this.auth.EMAIL_REGEX)
+        Validators.pattern(this.email.EMAIL_REGEX)
       ])
+    });
+
+    this.emailInputForm.setValue({
+      email: this.email.getEmail()
     });
   }
 
