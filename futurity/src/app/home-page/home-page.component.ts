@@ -16,7 +16,7 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() {
     this.emailInputForm = new FormGroup({
-      email: new FormControl(null, [
+      email: new FormControl("", [
         Validators.required,
         Validators.pattern(this.email.EMAIL_REGEX)
       ])
