@@ -1,16 +1,15 @@
-import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
-
-import {HomePageComponent} from "./home-page.component";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
 import {RouterTestingModule} from "@angular/router/testing";
-import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import {RegisterEmailPageComponent} from "./register-email-page.component";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {LoginPageComponent} from "../login-page/login-page.component";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {Location} from "@angular/common";
-import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
 import {sharedEmailTest} from "../../tests/email-test";
 
-describe("HomePageComponent", () => {
-  let component: HomePageComponent;
-  let fixture: ComponentFixture<HomePageComponent>;
+describe("RegisterEmailPageComponent", () => {
+  let component: RegisterEmailPageComponent;
+  let fixture: ComponentFixture<RegisterEmailPageComponent>;
   let location: Location;
   let emailInput: any;
   let emailForm: AbstractControl;
@@ -18,16 +17,16 @@ describe("HomePageComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
-        {path: "singup", component: RegisterEmailPageComponent}
+        {path: "login", component: LoginPageComponent}
       ]), ReactiveFormsModule, FormsModule],
-      declarations: [HomePageComponent],
+      declarations: [RegisterEmailPageComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomePageComponent);
+    fixture = TestBed.createComponent(RegisterEmailPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     location = TestBed.inject(Location);
@@ -48,15 +47,5 @@ describe("HomePageComponent", () => {
     };
   });
 
-  it("should navigate to the register page", waitForAsync(() => {
-    const button = fixture.debugElement.nativeElement.querySelector("button");
-    emailInput.value = "alex@jpeg.com";
-    emailInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
 
-    button.click();
-    fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/singup");
-    });
-  }));
 });
