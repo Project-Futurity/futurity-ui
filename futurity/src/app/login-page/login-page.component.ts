@@ -19,11 +19,11 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = new FormGroup({
-      email: new FormControl(null, [
+      email: new FormControl("", [
         Validators.required,
         Validators.pattern(this.email.EMAIL_REGEX)
       ]),
-      password: new FormControl(null, [
+      password: new FormControl("", [
         Validators.required,
         Validators.minLength(6)
       ])
@@ -37,8 +37,8 @@ export class LoginPageComponent implements OnInit {
 
   onSubmit() {
     /* an error from the backend */
-    this.loginError = "Incorrect email or password. Check the entered data";
-    this.disableLoginButton = true; // disable the button while requesting to the server
+    // this.loginError = "Incorrect email or password. Check the entered data";
+    // this.disableLoginButton = true; // disable the button while requesting to the server
 
     // login
   }
