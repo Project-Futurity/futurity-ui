@@ -10,6 +10,7 @@ import {SimplebarAngularModule} from "simplebar-angular";
 import { NotLoginedLayoutComponent } from './shared/layouts/not-logined-layout/not-logined-layout.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RegisterEmailPageComponent } from './register-email-page/register-email-page.component';
+import { RegisterUserDataPageComponent } from './register-user-data-page/register-user-data-page.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { RegisterEmailPageComponent } from './register-email-page/register-email
     HomePageComponent,
     NotLoginedLayoutComponent,
     LoginPageComponent,
-    RegisterEmailPageComponent
+    RegisterEmailPageComponent,
+    RegisterUserDataPageComponent
   ],
   imports: [
     BrowserModule,
