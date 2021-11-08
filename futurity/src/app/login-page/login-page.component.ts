@@ -9,8 +9,10 @@ import {EmailService} from "../shared/services/email.service";
 })
 export class LoginPageComponent implements OnInit {
   showPassword = false;
+  passwordType = "password"; // text or password
+
   disableLoginButton = false;
-  @ViewChild('password') input: ElementRef;
+
   loginForm: FormGroup;
   loginError: string = null;
 
@@ -32,7 +34,7 @@ export class LoginPageComponent implements OnInit {
 
   togglePasswordView() {
     this.showPassword = !this.showPassword;
-    this.input.nativeElement.type = this.showPassword ? "text" : "password";
+    this.passwordType = this.showPassword ? "text" : "password";
   }
 
   onSubmit() {
