@@ -5,7 +5,7 @@ import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms"
 import {LoginPageComponent} from "../login-page/login-page.component";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {Location} from "@angular/common";
-import {sharedEmailTest} from "../../tests/email-test";
+import {sharedEmailTest} from "../shared/tests/email-test";
 import {EmailService} from "../shared/services/email.service";
 
 describe("RegisterEmailPageComponent", () => {
@@ -48,6 +48,30 @@ describe("RegisterEmailPageComponent", () => {
       emailInput: emailInput,
       emailForm: emailForm
     };
+  });
+
+  it("should count elements in the email form group", () => {
+    const form = fixture.debugElement.nativeElement.querySelector("form");
+    const countInputs = form.querySelectorAll("input");
+
+    expect(countInputs.length).toEqual(1);
+  });
+
+  it("should not block the button after valid entering", () => {
+    const button = fixture.debugElement.nativeElement.querySelector("button");
+    emailInput.value = "alex@jpeg.com";
+    emailInput.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+
+    expect(button.disabled).toBeFalsy();
+    expect(button.style["pointer-events"]).toEqual("auto");
+  });
+
+  it("should be empty since the initial value", () => {
+    const form = component.emailInputForm;
+    const email = {email: ""};
+
+    expect(form.value).toEqual(email);
   });
 
   it("should navigate to the login page", waitForAsync(() => {

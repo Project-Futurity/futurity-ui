@@ -17,20 +17,6 @@ export function sharedEmailTest(initialize: () => any) {
       emailForm = cp.emailForm;
     });
 
-    it("should count elements in the email form group", () => {
-      const form = fixture.debugElement.nativeElement.querySelector("form");
-      const countInputs = form.querySelectorAll("input");
-
-      expect(countInputs.length).toEqual(1);
-    });
-
-    it("should be empty since the initial value", () => {
-      const form = component.emailInputForm;
-      const email = {email: ""};
-
-      expect(form.value).toEqual(email);
-    });
-
     it("should be empty and has errors (before entering)", () => {
       expect(emailForm.value).toEqual(emailInput.value);
       expect(emailForm.errors).not.toBeNull(); // if it is required must be the error
@@ -68,16 +54,6 @@ export function sharedEmailTest(initialize: () => any) {
 
       expect(button.style["pointer-events"]).toEqual("none");
       expect(button.disabled).toBeTruthy();
-    });
-
-    it("should not block the button after valid entering", () => {
-      const button = fixture.debugElement.nativeElement.querySelector("button");
-      emailInput.value = "alex@jpeg.com";
-      emailInput.dispatchEvent(new Event("input"));
-      fixture.detectChanges();
-
-      expect(button.disabled).toBeFalsy();
-      expect(button.style["pointer-events"]).toEqual("auto");
     });
 
     it("should block the button after invalid entering", () => {

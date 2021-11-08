@@ -2,10 +2,11 @@ import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
 import {LoginPageComponent} from "./login-page.component";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
-import {By} from "@angular/platform-browser";
 import {Location} from "@angular/common";
 import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
 import {RouterTestingModule} from "@angular/router/testing";
+import {sharedPasswordTest} from "../shared/tests/password-test";
+import {sharedEmailTest} from "../shared/tests/email-test";
 
 interface FormTest {
   emailInput: any;
@@ -48,6 +49,23 @@ describe("LoginPageComponent", () => {
     };
   });
 
+  sharedPasswordTest(() => {
+    return {
+      fixture: fixture,
+      component: component,
+      formTest: formTest
+    }
+  });
+
+  sharedEmailTest(() => {
+    return {
+      fixture: fixture,
+      component: component,
+      emailInput: formTest.emailInput,
+      emailForm: formTest.emailForm
+    };
+  });
+
   it("should create", () => {
     expect(component).toBeTruthy();
   });
@@ -77,60 +95,15 @@ describe("LoginPageComponent", () => {
     expect(formTest.emailInput.value).toEqual(formTest.emailForm.value);
     expect(formTest.passwordInput.value).toEqual(formTest.passwordForm.value);
 
-    expect(formTest.emailForm.errors).not.toBeNull();
+    expect(formTest.emailForm.errors).toBeTruthy();
     expect(formTest.emailForm.errors.required).toBeTruthy();
     expect(formTest.emailForm.invalid).toBeTruthy();
 
-    expect(formTest.passwordForm.errors).not.toBeNull();
+    expect(formTest.passwordForm.errors).toBeTruthy();
     expect(formTest.passwordForm.errors.required).toBeTruthy();
     expect(formTest.passwordForm.invalid).toBeTruthy();
   });
 
-  it("should be valid and has no errors for email (after entering)", () => {
-    formTest.emailInput.value = "alex@gmail.com";
-    formTest.emailInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(formTest.emailInput.value).toEqual(formTest.emailForm.value);
-    expect(formTest.emailForm.errors).toBeNull();
-    expect(formTest.emailForm.valid).toBeTruthy();
-  });
-
-  it("should be valid and has no errors for password (after entering)", () => {
-    formTest.passwordInput.value = "password";
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(formTest.passwordInput.value).toEqual(formTest.passwordInput.value);
-    expect(formTest.passwordForm.errors).toBeNull();
-    expect(formTest.passwordForm.valid).toBeTruthy();
-  });
-
-  it("should be invalid and has errors for email (after entering)", () => {
-    const invalidEmails = ["invalid email", "invalid@mail", "invalid.ru", "invalid@mail,ru"];
-
-    for (let i = 0; i < invalidEmails.length; i++) {
-      formTest.emailInput.value = invalidEmails[i];
-      formTest.emailInput.dispatchEvent(new Event("input"));
-      fixture.detectChanges();
-
-      expect(formTest.emailInput.value).toEqual(formTest.emailForm.value);
-      expect(formTest.emailForm.errors).not.toBeNull();
-      expect(formTest.emailForm.errors['pattern']).not.toBeNull();
-      expect(formTest.emailForm.errors['required']).toBeFalsy();
-    }
-  });
-
-  it("should be invalid and has errors for password (after entering)", () => {
-    formTest.passwordInput.value = "12345"; // less than 6 chars
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(formTest.passwordInput.value).toEqual(formTest.passwordForm.value);
-    expect(formTest.passwordForm.errors).not.toBeNull();
-    expect(formTest.passwordForm.errors['requiredLength']).not.toBeNull();
-    expect(formTest.passwordForm.errors['required']).toBeFalsy();
-  });
 
   it("should hide/show the password by using checkbox", () => {
     formTest.checkbox.click();
@@ -146,13 +119,6 @@ describe("LoginPageComponent", () => {
     expect(formTest.passwordInput.type).toEqual("password");
   });
 
-  it("should block the button before entering", () => {
-    const button = fixture.debugElement.nativeElement.querySelector("button");
-
-    expect(button.style["pointer-events"]).toEqual("none");
-    expect(button.disabled).toBeTruthy();
-  });
-
   it("should not block the button after valid entering", () => {
     const button = fixture.debugElement.nativeElement.querySelector("button");
 
@@ -164,70 +130,6 @@ describe("LoginPageComponent", () => {
 
     expect(button.disabled).toBeFalsy();
     expect(button.style["pointer-events"]).toEqual("auto");
-  });
-
-  it("should not show the error of invalid password before entering", () => {
-    const error = fixture.debugElement.query(By.css(".error-message"));
-
-    expect(error).toBeNull();
-  });
-
-  it("should show the error of invalid password after entering", () => {
-    formTest.passwordForm.markAllAsTouched();
-    formTest.passwordInput.value = "1234";
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    const error = fixture.debugElement.query(By.css(".error-message"));
-    expect(error).not.toBeNull();
-  });
-
-  it("should not show the error of invalid password after rewrite the password", () => {
-    // wrong input
-    formTest.passwordForm.markAllAsTouched();
-    formTest.passwordInput.value = "1234";
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.query(By.css(".error-message"))).not.toBeNull();
-
-    // correct wrong input
-    formTest.passwordInput.value = "123456";
-    formTest.passwordForm.markAllAsTouched();
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.query(By.css(".error-message"))).toBeNull();
-  });
-
-  it("should block the button after invalid email entering", () => {
-    const invalidEmails = ["invalid email", "invalid@mail", "invalid.ru", "invalid@mail,ru"];
-    const button = fixture.debugElement.nativeElement.querySelector("button");
-    formTest.passwordInput.value = "password"; // valid password
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-
-    for (let i = 0; i < invalidEmails.length; i++) {
-      formTest.emailInput.value = invalidEmails[i];
-      formTest.emailInput.dispatchEvent(new Event("input"));
-      fixture.detectChanges();
-
-
-      expect(button.disabled).toBeTruthy();
-      expect(button.style["pointer-events"]).toEqual("none");
-    }
-  });
-
-  it("should block the button after invalid password entering", () => {
-    const button = fixture.debugElement.nativeElement.querySelector("button");
-    formTest.passwordInput.value = "12345"; // less than 6 chars
-
-    formTest.emailInput.value = "alex@jpeg.com";
-    formTest.emailInput.dispatchEvent(new Event("input"));
-    formTest.passwordInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    expect(button.disabled).toBeTruthy();
-    expect(button.style["pointer-events"]).toEqual("none");
   });
 
   it("should navigate to the register page", waitForAsync(() => {
