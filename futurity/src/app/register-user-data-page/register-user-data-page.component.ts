@@ -1,21 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
-import {EmailService} from "../shared/services/email.service";
+import {AvatarService} from "../shared/services/avatar.service";
 
 @Component({
   selector: 'app-register-user-data-page',
   templateUrl: './register-user-data-page.component.html',
-  styleUrls: ['./register-user-data-page.component.css']
+  styleUrls: ['./register-user-data-page.component.css'],
+  providers: [AvatarService]
 })
 export class RegisterUserDataPageComponent implements OnInit {
-  avatarUrl: string = null;
-  avatar: File;
   registerForm: FormGroup;
-
   showPasswords = false;
   passwordType = "password"; // text or password
 
-  constructor() {}
+  constructor(private avatarService: AvatarService) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -30,17 +28,11 @@ export class RegisterUserDataPageComponent implements OnInit {
   }
 
   onChangeAvatar(event: any) {
-    const reader = new FileReader();
-
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = () => {
-      this.avatarUrl = reader.result as string;
-      this.avatar = event.target.files[0];
-    }
+    this.avatarService.loadImage(event.target.files[0]);
   }
 
   getAvatar(): string {
-    return this.avatarUrl == null ? "assets/user.png" : this.avatarUrl;
+    return this.avatarService.getAvatar();
   }
 
   togglePasswordView() {
@@ -52,6 +44,6 @@ export class RegisterUserDataPageComponent implements OnInit {
     const password = form.get('password').value;
     const confirmPassword = form.get('confirmPassword').value;
 
-    return password === confirmPassword ? null : {match: true};
+    return password === confirmPassword ? null : {notMatch: true};
   }
 }
