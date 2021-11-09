@@ -47,7 +47,7 @@
         <div class="term">></div>
 
         <span class="error-message"
-              *ngIf="registerForm.get('confirmPassword').touched && registerForm.errors?.match"
+              *ngIf="registerForm.get('confirmPassword').touched && registerForm.errors?.notMatch"
         >
           Passwords does not match
         </span>
