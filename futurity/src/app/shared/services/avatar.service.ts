@@ -5,13 +5,13 @@ import { Injectable } from '@angular/core';
 })
 export class AvatarService {
   private readonly DEFAULT_IMAGE_URL = "/assets/user.png";
-  private readonly ALLOWED_EXTENSIONS = ['jpeg', 'png', 'gif'];
+  private readonly ALLOWED_EXTENSIONS = ["jpeg", "png", "gif"];
   private avatar: File;
   private avatarUrl: string;
 
   constructor() { }
 
-  loadImage(image: File): void {
+  loadImage(image: File, callback?:() => void): void {
     if (!this.isCorrectExtension(image.type)) {
       return;
     }
@@ -21,6 +21,8 @@ export class AvatarService {
     reader.onload = () => {
       this.avatarUrl = reader.result as string;
       this.avatar = image;
+
+      callback();
     };
   }
 
