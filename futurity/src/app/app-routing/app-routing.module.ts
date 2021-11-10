@@ -5,6 +5,7 @@ import {NotLoginedLayoutComponent} from "../shared/layouts/not-logined-layout/no
 import {LoginPageComponent} from "../login-page/login-page.component";
 import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
 import {RegisterUserDataPageComponent} from "../register-user-data-page/register-user-data-page.component";
+import {RegisterUserDataCanActivateGuard} from "../shared/guards/register-user-data-can-activate.guard";
 
 
 const routes: Routes = [
@@ -13,7 +14,7 @@ const routes: Routes = [
       {path: "", component: HomePageComponent},
       {path: "login", component: LoginPageComponent},
       {path: "singup", component: RegisterEmailPageComponent},
-      {path: "register", component: RegisterUserDataPageComponent}
+      {path: "register", component: RegisterUserDataPageComponent, canActivate: [RegisterUserDataCanActivateGuard]}
     ]
   }
 ];

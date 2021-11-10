@@ -17,4 +17,8 @@ export class EmailService {
   setEmail(email: string) {
     this.email = email;
   }
+
+  hasEmail() {
+    return this.email != "";
+  }
 }
