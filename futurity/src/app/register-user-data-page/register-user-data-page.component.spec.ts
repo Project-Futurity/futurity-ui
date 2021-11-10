@@ -67,7 +67,7 @@ describe("RegisterUserDataPageComponent", () => {
     expect(countInputs.length).toEqual(5); // 1 upload button, 3 inputs and 1 checkbox
   });
 
-  it("should be empty since the initial value", () => {
+  it("should be empty since the initial value (except email)", () => {
     const form = component.registerForm;
     const inputForm = {
       nickname: "",
@@ -75,6 +75,7 @@ describe("RegisterUserDataPageComponent", () => {
       confirmPassword: ""
     };
 
+    expect(component.email).toBeFalsy();
     expect(form.value).toEqual(inputForm);
   });
 

@@ -19,7 +19,8 @@ describe("RegisterEmailPageComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
-        {path: "login", component: LoginPageComponent}
+        {path: "login", component: LoginPageComponent},
+        {path: "register", component: RegisterEmailPageComponent}
       ]), ReactiveFormsModule, FormsModule],
       declarations: [RegisterEmailPageComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -111,4 +112,18 @@ describe("RegisterEmailPageComponent", () => {
     expect(component.emailInputForm.get("email").value).toEqual(email);
     expect(fixture.debugElement.nativeElement.querySelector("form").querySelector("input").value).toEqual(email);
   });
+
+  it("should navigate to the register data user page", waitForAsync(() => {
+    spyOn(emailService, "setEmail");
+    const button = fixture.debugElement.nativeElement.querySelector("button");
+    emailInput.value = "alex@jpeg.com";
+    emailInput.dispatchEvent(new Event("input"));
+    fixture.detectChanges();
+
+    button.click();
+    fixture.whenStable().then(() => {
+      expect(emailService.setEmail).toHaveBeenCalled();
+      expect(location.path()).toEqual("/register");
+    });
+  }));
 });
