@@ -13,7 +13,7 @@
       </div>
 
       <div class="position-relative input-width">
-        <input type="password" class="terminal-input"  required #password formControlName="password" id="password">
+        <input [type]="passwordType" class="terminal-input" required formControlName="password" id="password">
         <label class="label-input">Password</label>
         <span class="bar"></span>
         <div class="term">></div>
@@ -22,7 +22,7 @@
               *ngIf="loginForm.get('password').touched && loginForm.get('password').invalid &&
               loginForm.get('password').errors['minlength']"
         >
-          The password must be more then {{loginForm.get('password').errors['minlength']['requiredLength']}}
+          The password must be more then {{loginForm.get('password').errors['minlength']['requiredLength']}} characters
         </span>
 
 

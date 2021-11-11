@@ -8,7 +8,6 @@
 
 .input-width {
   width: 70%;
-  margin-top: 50px;
 }
 
 @media (max-width: 768px) {
@@ -20,9 +19,5 @@
 @media (max-width: 576px) {
   .input-width {
     width: 85%;
-  }
-
-  .input-width {
-    margin-top: 30px;
   }
 }

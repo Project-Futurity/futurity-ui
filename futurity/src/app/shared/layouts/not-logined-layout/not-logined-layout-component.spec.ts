@@ -36,7 +36,7 @@ describe("NotLoginedLayoutComponent", () => {
   it("should navigate to the login page", waitForAsync(() => {
     const button = fixture.debugElement.nativeElement.querySelectorAll("button")[1]; // login
 
-    expect(button).not.toBeNull();
+    expect(button).toBeTruthy();
     expect(button.innerHTML).toEqual("Login");
 
     button.click();
@@ -48,7 +48,7 @@ describe("NotLoginedLayoutComponent", () => {
   it("should navigate to the register page", waitForAsync(() => {
     const button = fixture.debugElement.nativeElement.querySelectorAll("button")[2]; // singup
 
-    expect(button).not.toBeNull();
+    expect(button).toBeTruthy();
     expect(button.innerHTML).toEqual("Sing up");
 
     button.click();

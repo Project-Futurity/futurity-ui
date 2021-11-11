@@ -4,6 +4,8 @@ import {NgModule} from "@angular/core";
 import {NotLoginedLayoutComponent} from "../shared/layouts/not-logined-layout/not-logined-layout.component";
 import {LoginPageComponent} from "../login-page/login-page.component";
 import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
+import {RegisterUserDataPageComponent} from "../register-user-data-page/register-user-data-page.component";
+import {RegisterUserDataCanActivateGuard} from "../shared/guards/register-user-data-can-activate.guard";
 
 
 const routes: Routes = [
@@ -11,7 +13,8 @@ const routes: Routes = [
     path: "", component: NotLoginedLayoutComponent, children: [
       {path: "", component: HomePageComponent},
       {path: "login", component: LoginPageComponent},
-      {path: "singup", component: RegisterEmailPageComponent}
+      {path: "singup", component: RegisterEmailPageComponent},
+      {path: "register", component: RegisterUserDataPageComponent, canActivate: [RegisterUserDataCanActivateGuard]}
     ]
   }
 ];

@@ -1,0 +1,73 @@
+<div class="container-fluid p-4">
+  <div class="card">
+    <form class="card-body d-flex flex-column align-items-center" [formGroup]="registerForm">
+
+      <div class="avatar-wrapper mt-1 mt-sm-3">
+        <img class="avatar" [src]="getAvatar()">
+        <div class="upload-file-button">
+          <img class="avatar" src="assets/plus.png">
+        </div>
+        <input class="upload-file" type="file" accept=".png, .jpeg, .gif" (change)="onChangeAvatar($event)">
+      </div>
+
+      <div class="upload-avatar-text">Choose your avatar</div>
+
+      <div class="position-relative mt-3 input-width">
+        <input class="terminal-input" type="text" required formControlName="nickname" id="nickname">
+        <label class="label-input">What should we call you?</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+
+        <span class="error-message position-absolute"
+              *ngIf="registerForm.get('nickname').touched && registerForm.get('nickname').invalid &&
+              registerForm.get('nickname').errors['minlength']"
+        >
+          The nickname must be more then {{registerForm.get('nickname').errors['minlength']['requiredLength']}}
+        </span>
+      </div>
+
+      <div class="position-relative input-width">
+        <input class="terminal-input" [type]="passwordType" required formControlName="password" id="password">
+        <label class="label-input">Password</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+
+        <span class="error-message position-absolute"
+              *ngIf="registerForm.get('password').touched && registerForm.get('password').invalid &&
+              registerForm.get('password').errors['minlength']"
+        >
+          The password must be more then {{registerForm.get('password').errors['minlength']['requiredLength']}}
+        </span>
+      </div>
+
+      <div class="position-relative input-width">
+        <input class="terminal-input" [type]="passwordType" required formControlName="confirmPassword" id="confirmPassword">
+        <label class="label-input">Confirm password</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+
+        <span class="error-message"
+              *ngIf="registerForm.get('confirmPassword').touched && registerForm.errors?.notMatch"
+        >
+          Passwords does not match
+        </span>
+
+        <label class="b-contain mt-3">
+          <span>Show passwords</span>
+          <input type="checkbox" (click)="togglePasswordView()">
+          <div class="b-input"></div>
+        </label>
+      </div>
+
+      <div class="mb-1 mb-sm-3 mt-3 mt-sm-4">
+        <button type="submit" class="btn mx-0"
+                [disabled]="registerForm.invalid"
+                [ngStyle]="{
+                  'pointer-events': registerForm.invalid ? 'none' : 'auto'
+                }">
+          Register
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
