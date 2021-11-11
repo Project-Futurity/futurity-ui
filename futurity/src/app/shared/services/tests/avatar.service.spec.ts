@@ -1,5 +1,6 @@
 import {AvatarService} from "../avatar.service";
 import {TestBed, waitForAsync} from "@angular/core/testing";
+import createSpy = jasmine.createSpy;
 
 describe("AvatarService", () => {
   let service: AvatarService;
@@ -25,6 +26,7 @@ describe("AvatarService", () => {
     service.loadImage(mockImage, () => {
       expect(service["avatarUrl"]).toBeTruthy();
       expect(service["avatar"]).toEqual(mockImage);
+      expect(service.getAvatar()).not.toEqual(service["DEFAULT_IMAGE_URL"]);
     });
   }));
 
@@ -50,5 +52,16 @@ describe("AvatarService", () => {
     for (let i = 0; i < wrongTypes.length; i++) {
       expect(service["isCorrectExtension"](wrongTypes[i])).toBeFalsy();
     }
+  });
+
+  it("should return from function", () => {
+    const wrongFile = new File([''], "image", {type: "wrongType"});
+    const callback = jasmine.createSpy().and.callFake(() => {});
+
+    service.loadImage(wrongFile, () => {
+      callback();
+    });
+
+    expect(callback).not.toHaveBeenCalled();
   });
 });

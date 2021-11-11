@@ -22,6 +22,7 @@ describe("EmailService", () => {
     const email = "alex@jpeg.com";
     service.setEmail(email);
 
+    expect(service.hasEmail()).toBeTruthy();
     expect(service.getEmail()).toEqual(email);
   });
 
@@ -31,5 +32,6 @@ describe("EmailService", () => {
 
     expect(service.getEmail()).toEqual(email);
     expect(service.getEmail()).toEqual("");
+    expect(service.hasEmail()).toBeFalsy();
   });
 });
