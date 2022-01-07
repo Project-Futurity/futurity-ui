@@ -1,23 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {AvatarService} from "../shared/services/avatar.service";
-import {EmailService} from "../shared/services/email.service";
 
 @Component({
   selector: 'app-register-user-data-page',
-  templateUrl: './register-user-data-page.component.html',
-  styleUrls: ['./register-user-data-page.component.css'],
+  templateUrl: './register-user-data-form.component.html',
+  styleUrls: ['./register-user-data-form.component.css'],
   providers: [AvatarService]
 })
-export class RegisterUserDataPageComponent implements OnInit {
+export class RegisterUserDataFormComponent implements OnInit {
   registerForm: FormGroup;
   showPasswords = false;
   passwordType = "password"; // text or password
-  email: string = null;
+  email: string;
 
-  constructor(private avatarService: AvatarService, private emailService: EmailService) {
-    this.email = emailService.getEmail();
-  }
+  constructor(private avatarService: AvatarService) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({

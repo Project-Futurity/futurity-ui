@@ -1,19 +1,19 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailService} from "../shared/services/email.service";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register-email-page',
-  templateUrl: './register-email-page.component.html',
-  styleUrls: ['./register-email-page.component.css']
+  templateUrl: './register-email-form.component.html',
+  styleUrls: ['./register-email-form.component.css']
 })
-export class RegisterEmailPageComponent implements OnInit {
+export class RegisterEmailFormComponent implements OnInit {
   emailInputForm: FormGroup;
   disableContinueButton = false;
   emailError: string = null;
+  @Output() closeEvent = new EventEmitter<string>();
 
-  constructor(private emailService: EmailService, private router: Router) {}
+  constructor(private emailService: EmailService) {}
 
   ngOnInit() {
     this.emailInputForm = new FormGroup({
@@ -29,10 +29,11 @@ export class RegisterEmailPageComponent implements OnInit {
   }
 
   onSubmit() {
+    this.closeEvent.emit(this.emailInputForm.value.email);
     this.emailError = "This email is already taken";
     this.disableContinueButton = true; // disable the button while requesting to the server
-    this.emailService.setEmail(this.emailInputForm.value);
-    this.router.navigate(["/register"]);
+    // this.emailService.setEmail(this.emailInputForm.value);
+    // this.router.navigate(["/register"]);
     // submit email
   }
 }

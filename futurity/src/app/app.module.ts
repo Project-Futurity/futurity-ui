@@ -9,8 +9,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SimplebarAngularModule} from "simplebar-angular";
 import { NotLoginedLayoutComponent } from './shared/layouts/not-logined-layout/not-logined-layout.component';
 import { LoginPageComponent } from './login-page/login-page.component';
-import { RegisterEmailPageComponent } from './register-email-page/register-email-page.component';
-import { RegisterUserDataPageComponent } from './register-user-data-page/register-user-data-page.component';
+import { RegisterEmailFormComponent } from './register-email-page/register-email-form.component';
+import { RegisterUserDataFormComponent } from './register-user-data-page/register-user-data-form.component';
+import { RegistrationPageComponent } from './registration-page/registration-page.component';
+import { RegistrationFormDirective } from './shared/directives/registration-form.directive';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,10 @@ import { RegisterUserDataPageComponent } from './register-user-data-page/registe
     HomePageComponent,
     NotLoginedLayoutComponent,
     LoginPageComponent,
-    RegisterEmailPageComponent,
-    RegisterUserDataPageComponent
+    RegisterEmailFormComponent,
+    RegisterUserDataFormComponent,
+    RegistrationPageComponent,
+    RegistrationFormDirective
   ],
   imports: [
     BrowserModule,

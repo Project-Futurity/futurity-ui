@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
 import {RouterTestingModule} from "@angular/router/testing";
-import {RegisterEmailPageComponent} from "./register-email-page.component";
+import {RegisterEmailFormComponent} from "./register-email-form.component";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginPageComponent} from "../login-page/login-page.component";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
@@ -9,8 +9,8 @@ import {sharedEmailTest} from "../shared/tests/email-test";
 import {EmailService} from "../shared/services/email.service";
 
 describe("RegisterEmailPageComponent", () => {
-  let component: RegisterEmailPageComponent;
-  let fixture: ComponentFixture<RegisterEmailPageComponent>;
+  let component: RegisterEmailFormComponent;
+  let fixture: ComponentFixture<RegisterEmailFormComponent>;
   let location: Location;
   let emailInput: any;
   let emailForm: AbstractControl;
@@ -20,16 +20,16 @@ describe("RegisterEmailPageComponent", () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
         {path: "login", component: LoginPageComponent},
-        {path: "register", component: RegisterEmailPageComponent}
+        {path: "register", component: RegisterEmailFormComponent}
       ]), ReactiveFormsModule, FormsModule],
-      declarations: [RegisterEmailPageComponent],
+      declarations: [RegisterEmailFormComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterEmailPageComponent);
+    fixture = TestBed.createComponent(RegisterEmailFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     location = TestBed.inject(Location);
@@ -112,18 +112,4 @@ describe("RegisterEmailPageComponent", () => {
     expect(component.emailInputForm.get("email").value).toEqual(email);
     expect(fixture.debugElement.nativeElement.querySelector("form").querySelector("input").value).toEqual(email);
   });
-
-  it("should navigate to the register data user page", waitForAsync(() => {
-    spyOn(emailService, "setEmail");
-    const button = fixture.debugElement.nativeElement.querySelector("button");
-    emailInput.value = "alex@jpeg.com";
-    emailInput.dispatchEvent(new Event("input"));
-    fixture.detectChanges();
-
-    button.click();
-    fixture.whenStable().then(() => {
-      expect(emailService.setEmail).toHaveBeenCalled();
-      expect(location.path()).toEqual("/register");
-    });
-  }));
 });
