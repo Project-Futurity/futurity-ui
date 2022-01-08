@@ -10,6 +10,19 @@
   width: 70%;
 }
 
+.alert {
+  width: 90%;
+}
+
+.link {
+  cursor: pointer;
+  color: #555557;
+}
+
+.link:hover {
+  color: #1b1e21;
+}
+
 @media (max-width: 768px) {
   .btn {
     width: 120px;
@@ -19,5 +32,9 @@
 @media (max-width: 576px) {
   .input-width {
     width: 85%;
+  }
+
+  .alert {
+    width: 100%;
   }
 }

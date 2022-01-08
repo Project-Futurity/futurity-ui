@@ -3,7 +3,9 @@
     <form class="card-body d-flex flex-column align-items-center" [formGroup]="emailInputForm" (ngSubmit)="onSubmit()">
       <div class="card-title mt-1 mt-sm-3 py-3">Welcome to Futurity</div>
 
-      <div class="error-block mt-1 mb-4" *ngIf="emailError">{{emailError}}</div>
+      <ngb-alert #alert class="text-center" [type]="alert.type" *ngIf="emailInfo">
+        {{emailInfo}}
+      </ngb-alert>
 
       <div class="position-relative input-width">
         <input class="terminal-input" type="text" required formControlName="email" id="email">
@@ -12,10 +14,29 @@
         <div class="term">></div>
       </div>
 
+      <div class="position-relative mt-5 mb-3 input-width" *ngIf="isEmailSend">
+        <input class="terminal-input" type="text" required formControlName="code" id="code">
+        <label class="label-input">Code</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+
+        <span class="error-message position-absolute"
+              *ngIf="emailInputForm.get('code').touched && emailInputForm.get('code').invalid"
+        >
+          The code must be 6 numbers
+        </span>
+      </div>
+
+      <ngb-alert class="text-center mt-3 mb-0" *ngIf="showSendAgainTip" [dismissible]="false" type="dark">
+        If you have not got the message then
+        <br>
+        <div class="link" (click)="sendAgain()">try to send it again</div>
+      </ngb-alert>
+
       <button type="submit" class="btn mx-0 mt-3 mt-sm-4"
-              [disabled]="emailInputForm.invalid || disableContinueButton"
+              [disabled]="isFormInvalid() || disableContinueButton"
               [ngStyle]="{
-                  'pointer-events': emailInputForm.invalid ? 'none' : 'auto'
+                  'pointer-events': isFormInvalid() ? 'none' : 'auto'
                 }"
       >
         Continue

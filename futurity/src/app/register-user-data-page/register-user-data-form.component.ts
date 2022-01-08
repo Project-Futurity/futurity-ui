@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AvatarService} from "../shared/services/avatar.service";
+import {RegistrationValidator} from "../shared/validators/registration-validator";
 
 @Component({
   selector: 'app-register-user-data-page',
@@ -24,8 +25,10 @@ export class RegisterUserDataFormComponent implements OnInit {
       password: new FormControl("", [
         Validators.required, Validators.minLength(6)
       ]),
-      confirmPassword: new FormControl("", [Validators.required])
-    }, {validators: this.checkPassword});
+      confirmPassword: new FormControl("", [
+        Validators.required, RegistrationValidator.mustMatch("password")
+      ])
+    });
   }
 
   onChangeAvatar(event: any) {
@@ -39,12 +42,5 @@ export class RegisterUserDataFormComponent implements OnInit {
   togglePasswordView() {
     this.showPasswords = !this.showPasswords;
     this.passwordType = this.showPasswords ? "text" : "password";
-  }
-
-  private checkPassword(form: AbstractControl): ValidationErrors | null {
-    const password = form.get('password').value;
-    const confirmPassword = form.get('confirmPassword').value;
-
-    return password === confirmPassword ? null : {notMatch: true};
   }
 }

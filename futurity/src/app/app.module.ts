@@ -33,7 +33,6 @@ import { RegistrationFormDirective } from './shared/directives/registration-form
     ReactiveFormsModule,
     SimplebarAngularModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
