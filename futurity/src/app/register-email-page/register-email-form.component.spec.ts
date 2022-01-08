@@ -7,6 +7,7 @@ import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {Location} from "@angular/common";
 import {sharedEmailTest} from "../shared/tests/email-test";
 import {EmailService} from "../shared/services/email.service";
+import {HttpClientModule} from "@angular/common/http";
 
 describe("RegisterEmailPageComponent", () => {
   let component: RegisterEmailFormComponent;
@@ -21,7 +22,7 @@ describe("RegisterEmailPageComponent", () => {
       imports: [RouterTestingModule.withRoutes([
         {path: "login", component: LoginPageComponent},
         {path: "register", component: RegisterEmailFormComponent}
-      ]), ReactiveFormsModule, FormsModule],
+      ]), ReactiveFormsModule, FormsModule, HttpClientModule],
       declarations: [RegisterEmailFormComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

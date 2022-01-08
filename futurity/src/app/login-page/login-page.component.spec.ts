@@ -7,6 +7,7 @@ import {RegisterEmailFormComponent} from "../register-email-page/register-email-
 import {RouterTestingModule} from "@angular/router/testing";
 import {sharedPasswordTest} from "../shared/tests/password-test";
 import {sharedEmailTest} from "../shared/tests/email-test";
+import {HttpClientModule} from "@angular/common/http";
 
 interface FormTest {
   emailInput: any;
@@ -26,7 +27,7 @@ describe("LoginPageComponent", () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
         {path: "singup", component: RegisterEmailFormComponent}
-      ]), ReactiveFormsModule, FormsModule],
+      ]), ReactiveFormsModule, FormsModule, HttpClientModule],
       declarations: [LoginPageComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

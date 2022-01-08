@@ -13,6 +13,7 @@ import { RegisterEmailFormComponent } from './register-email-page/register-email
 import { RegisterUserDataFormComponent } from './register-user-data-page/register-user-data-form.component';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { RegistrationFormDirective } from './shared/directives/registration-form.directive';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RegistrationFormDirective } from './shared/directives/registration-form
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SimplebarAngularModule
+    SimplebarAngularModule,
+    HttpClientModule
   ],
   bootstrap: [AppComponent]
 })

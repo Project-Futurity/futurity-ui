@@ -12,15 +12,18 @@ export enum AlertType {
 })
 export class AlertConfiguratorService {
   public readonly TIME_TO_CLOSE = 7000;
+  private lastTimeout: any;
 
   constructor() { }
 
   configure(alert: NgbAlert, type: AlertType, whenClosed: () => void) {
+    clearTimeout(this.lastTimeout);
+
     alert.animation = true;
     alert.dismissible = true;
     alert.type = type;
     alert.closed.subscribe(() => whenClosed());
 
-    setTimeout(() => alert.close(), this.TIME_TO_CLOSE);
+    this.lastTimeout = setTimeout(() => alert.close(), this.TIME_TO_CLOSE)
   }
 }

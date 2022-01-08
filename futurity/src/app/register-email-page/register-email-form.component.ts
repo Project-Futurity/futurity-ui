@@ -1,15 +1,9 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild,} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailService} from "../shared/services/email.service";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
 import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
+import {ConfirmationService} from "../shared/services/confirmation.service";
 
 @Component({
   selector: 'app-register-email-page',
@@ -27,7 +21,8 @@ export class RegisterEmailFormComponent implements OnInit {
   showSendAgainTip = false;
 
   constructor(private emailService: EmailService, private alertConfigurator: AlertConfiguratorService,
-              private changeDetector: ChangeDetectorRef) {}
+              private changeDetector: ChangeDetectorRef, private confirmationService: ConfirmationService) {
+  }
 
   ngOnInit() {
     this.emailInputForm = new FormGroup({
@@ -46,36 +41,52 @@ export class RegisterEmailFormComponent implements OnInit {
   }
 
   sendAgain() {
-    setTimeout(() => {
-      this.emailInfo = "We have sent you a repeated message";
-      this.changeDetector.detectChanges();
-      this.showSendAgainTip = false;
+    this.showSendAgainTip = false;
 
-      this.alertConfigurator.configure(this.alert, AlertType.SUCCESS, () => {
+    this.sendEmailMessage("We have sent you a repeated message",
+      () => {
         this.emailInfo = null;
         this.showSendAgainTip = true;
       });
-    }, 2000);
   }
 
   onSubmit() {
+    this.disableContinueButton = true;
+
     if (!this.isEmailSend) {
-      this.disableContinueButton = true;
-
-      setTimeout(() => {
-        this.emailInfo = "We have sent you a confirmation email with code";
-        this.changeDetector.detectChanges();
-        this.disableContinueButton = false;
-        this.isEmailSend = true;
-
-        setTimeout(() => this.showSendAgainTip = true, this.alertConfigurator.TIME_TO_CLOSE);
-
-        this.alertConfigurator.configure(this.alert, AlertType.SUCCESS, () => {
-          this.emailInfo = null;
-        });
-      }, 2000);
+      this.sendEmailMessage("We have sent you a confirmation email with code",
+        () => this.emailInfo = null);
     } else {
-      this.closeEvent.emit(this.emailInputForm.value.email);
+      this.confirmationService.sendCodeToConfirm(this.emailInputForm.value).subscribe({
+        next: () => {
+          this.closeEvent.emit(this.emailInputForm.value.email);
+        },
+        error: (err) => {
+          this.emailInfo = err;
+          this.resolveAlert(AlertType.ERROR, () => this.emailInfo = null);
+        }
+      })
     }
+  }
+
+  private sendEmailMessage(successMessage: string, whenAlertClosed: () => void): void {
+    this.confirmationService.sendEmailToConfirm(this.emailInputForm.value.email).subscribe({
+      next: () => {
+        this.isEmailSend = true;
+        this.emailInfo = successMessage;
+        setTimeout(() => this.showSendAgainTip = true, this.alertConfigurator.TIME_TO_CLOSE);
+        this.resolveAlert(AlertType.SUCCESS, whenAlertClosed);
+      },
+      error: err => {
+        this.emailInfo = err;
+        this.resolveAlert(AlertType.ERROR, whenAlertClosed);
+      },
+    });
+  }
+
+  private resolveAlert(alertType: AlertType, whenAlertClosed: () => void) {
+    this.changeDetector.detectChanges();
+    this.disableContinueButton = false;
+    this.alertConfigurator.configure(this.alert, alertType, () => whenAlertClosed());
   }
 }

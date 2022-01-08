@@ -6,8 +6,7 @@ import {RegisterUserDataFormComponent} from "./register-user-data-form.component
 import {By} from "@angular/platform-browser";
 import {sharedPasswordTest} from "../shared/tests/password-test";
 import {AvatarService} from "../shared/services/avatar.service";
-import {EmailService} from "../shared/services/email.service";
-import createSpy = jasmine.createSpy;
+import {HttpClientModule} from "@angular/common/http";
 
 interface FormTest {
   uploadFileInput: any;
@@ -28,7 +27,7 @@ describe("RegisterUserDataPageComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule, FormsModule],
+      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule, FormsModule, HttpClientModule],
       declarations: [RegisterUserDataFormComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
