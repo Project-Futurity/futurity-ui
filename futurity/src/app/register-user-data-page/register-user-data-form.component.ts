@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AvatarService} from "../shared/services/avatar.service";
 import {RegistrationValidator} from "../shared/validators/registration-validator";
+import {RegistrationService} from "../shared/services/registration.service";
+import {RegistrationDto} from "../shared/dto/auth-dto";
+import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
+import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-register-user-data-page',
@@ -11,11 +15,16 @@ import {RegistrationValidator} from "../shared/validators/registration-validator
 })
 export class RegisterUserDataFormComponent implements OnInit {
   registerForm: FormGroup;
+  disableRegisterButton = false;
   showPasswords = false;
+
+  @ViewChild("alert") alert: NgbAlert;
+  registrationInfo: string = null;
   passwordType = "password"; // text or password
   email: string;
 
-  constructor(private avatarService: AvatarService) {}
+  constructor(private avatarService: AvatarService, private registrationService: RegistrationService,
+              private alertConfigurator: AlertConfiguratorService,  private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -29,18 +38,51 @@ export class RegisterUserDataFormComponent implements OnInit {
         Validators.required, RegistrationValidator.mustMatch("password")
       ])
     });
+
+    this.avatarService.loadDefaultAvatar();
   }
 
   onChangeAvatar(event: any) {
-    this.avatarService.loadImage(event.target.files[0]);
+    const error: string | void = this.avatarService.loadImage(event.target.files[0]);
+
+    if (error) {
+      this.registrationInfo = error;
+      this.resolveAlert(AlertType.ERROR,() => this.registrationInfo = null);
+    }
   }
 
   getAvatar(): string {
-    return this.avatarService.getAvatar();
+    return this.avatarService.getAvatarUrl();
+  }
+
+  onSubmit() {
+    const user: RegistrationDto = {
+      email: this.email,
+      nickname: this.registerForm.get("nickname").value,
+      password: this.registerForm.get("password").value
+    };
+
+    this.registrationService.register(user, this.avatarService.getAvatar()).subscribe({
+      next: () => {
+        // do something when success
+        this.registrationInfo = "Success";
+        this.resolveAlert(AlertType.SUCCESS, () => this.registrationInfo = null);
+      },
+      error: err => {
+        this.registrationInfo = err;
+        this.resolveAlert(AlertType.ERROR, () => this.registrationInfo = null);
+      }
+    })
   }
 
   togglePasswordView() {
     this.showPasswords = !this.showPasswords;
     this.passwordType = this.showPasswords ? "text" : "password";
+  }
+
+  private resolveAlert(alertType: AlertType, whenAlertClosed: () => void) {
+    this.changeDetector.detectChanges();
+    this.disableRegisterButton = false;
+    this.alertConfigurator.configure(this.alert, alertType, () => whenAlertClosed());
   }
 }
