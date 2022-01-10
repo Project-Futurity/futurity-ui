@@ -1,6 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailService} from "../shared/services/email.service";
+import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
+import {LoginService} from "../shared/services/login.service";
+import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
 
 @Component({
   selector: 'app-login-page',
@@ -13,11 +16,12 @@ export class LoginPageComponent implements OnInit {
 
   disableLoginButton = false;
 
+  @ViewChild("alert") alert: NgbAlert;
   loginForm: FormGroup;
-  loginError: string = null;
+  loginInfo: string = null;
 
-  constructor(private email: EmailService) {
-  }
+  constructor(private email: EmailService, private loginService: LoginService, private changeDetector: ChangeDetectorRef,
+              private alertConfigurator: AlertConfiguratorService) {}
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -38,10 +42,24 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit() {
-    /* an error from the backend */
-    // this.loginError = "Incorrect email or password. Check the entered data";
-    // this.disableLoginButton = true; // disable the button while requesting to the server
+    this.disableLoginButton = true;
 
-    // login
+    this.loginService.login(this.loginForm.value).subscribe({
+      next: () => {
+        // do something when success
+        this.loginInfo = "Success";
+        this.resolveAlert(AlertType.SUCCESS, () => this.loginInfo = null);
+      },
+      error: err => {
+        this.loginInfo = err;
+        this.resolveAlert(AlertType.ERROR, () => this.loginInfo = null);
+      }
+    });
+  }
+
+  private resolveAlert(alertType: AlertType, whenAlertClosed: () => void) {
+    this.changeDetector.detectChanges();
+    this.disableLoginButton = false;
+    this.alertConfigurator.configure(this.alert, alertType, () => whenAlertClosed());
   }
 }
