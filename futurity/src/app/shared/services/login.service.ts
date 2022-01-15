@@ -22,6 +22,10 @@ export class LoginService {
     );
   }
 
+  refreshToken(): Observable<any> {
+    return this.http.get(this.url + "/refresh-token");
+  }
+
   isAuthenticated(): boolean {
     const token = this.getToken();
 
@@ -36,7 +40,7 @@ export class LoginService {
     localStorage.removeItem(LoginService.TOKEN_KEY);
   }
 
-  private saveToken(token: TokenDto) {
+  saveToken(token: TokenDto) {
     localStorage.setItem(LoginService.TOKEN_KEY, token.token);
   }
 }

@@ -13,10 +13,10 @@ import {RegisterEmailFormComponent} from './register-email-page/register-email-f
 import {RegisterUserDataFormComponent} from './register-user-data-page/register-user-data-form.component';
 import {RegistrationPageComponent} from './registration-page/registration-page.component';
 import {RegistrationFormDirective} from './shared/directives/registration-form.directive';
-import {HttpClientModule} from "@angular/common/http";
-import {WorkspacePageComponent} from './workspace-page/workspace-page.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
 import {LoginService} from "./shared/services/login.service";
+import {RefreshTokenInterceptor} from "./shared/interceptors/refresh-token-interceptor";
 
 @NgModule({
   declarations: [
@@ -28,7 +28,6 @@ import {LoginService} from "./shared/services/login.service";
     RegisterUserDataFormComponent,
     RegistrationPageComponent,
     RegistrationFormDirective,
-    WorkspacePageComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +43,9 @@ import {LoginService} from "./shared/services/login.service";
         // here you can add allowed
       },
     }),
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
