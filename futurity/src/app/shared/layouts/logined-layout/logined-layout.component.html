@@ -1,0 +1,10 @@
+<nav class="navbar navbar-expand-md navbar-dark header-footer-bg py-3 yellow-border-bottom d-flex justify-content-between">
+  <img [src]="avatar" class="avatar">
+  <a class="navbar-brand navbar-brand align-items-center cursor-pointer d-none d-sm-flex" routerLink="/projects">
+    <img src="assets/terminal.png" width="60" height="60">
+    <span class="navbar-brand-name">Futurity</span>
+  </a>
+  <button class="btn" (click)="logout()">Logout</button>
+</nav>
+<router-outlet></router-outlet>
+

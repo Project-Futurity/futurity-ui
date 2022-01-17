@@ -1,18 +1,18 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {FileReaderService} from "./file-reader.service";
+import {FileMetaInfo} from "../interfaces/file-meta-info";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AvatarService {
-  private readonly DEFAULT_IMAGE_NAME = "user.png";
-  private readonly DEFAULT_IMAGE_URL = "/assets/" + this.DEFAULT_IMAGE_NAME;
+  private readonly DEFAULT_IMAGE_URL = "/assets/user.png";
   private readonly ALLOWED_EXTENSIONS = ["jpeg", "png", "gif"];
   private readonly ALLOWED_SIZE = 5 * 1024 * 1024;
   private avatar: File = null;
   private avatarUrl: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private fileReaderService: FileReaderService) {
   }
 
   loadImage(image: File): string | void {
@@ -24,14 +24,11 @@ export class AvatarService {
       return "Avatar is too large. Max size 5MB";
     }
 
-    this.readImage(image);
+    this.fileReaderService.readFile(image).subscribe(file => this.setAvatar(file));
   }
 
   loadDefaultAvatar() {
-    this.http.get(this.DEFAULT_IMAGE_URL, {responseType: "blob"})
-      .subscribe((image) => {
-        this.readImage(image);
-      });
+    this.fileReaderService.loadFromUrl(this.DEFAULT_IMAGE_URL).subscribe(file => this.setAvatar(file));
   }
 
   getAvatarUrl() {
@@ -42,21 +39,6 @@ export class AvatarService {
     return this.avatar;
   }
 
-  private readImage(image: Blob) {
-    const reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onload = () => {
-      this.avatarUrl = reader.result as string;
-
-      if (image instanceof File) {
-        this.avatar = image;
-      } else {
-        // if it is default avatar then it needs to be converted to File
-        this.avatar = new File([image], this.DEFAULT_IMAGE_NAME);
-      }
-    };
-  }
-
   private isCorrectExtension(type: string): boolean {
     const ex = type.split("/")[1];
 
@@ -65,5 +47,10 @@ export class AvatarService {
 
   private isCorrectFileSize(size: number): boolean {
     return size < this.ALLOWED_SIZE;
+  }
+
+  private setAvatar(file: FileMetaInfo) {
+    this.avatar = file.file;
+    this.avatarUrl = file.url;
   }
 }

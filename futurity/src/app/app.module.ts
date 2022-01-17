@@ -17,6 +17,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
 import {LoginService} from "./shared/services/login.service";
 import {RefreshTokenInterceptor} from "./shared/interceptors/refresh-token-interceptor";
+import { LoginedLayoutComponent } from './shared/layouts/logined-layout/logined-layout.component';
+import { ProjectsPageComponent } from './projects-page/projects-page.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import {RefreshTokenInterceptor} from "./shared/interceptors/refresh-token-inter
     RegisterUserDataFormComponent,
     RegistrationPageComponent,
     RegistrationFormDirective,
+    LoginedLayoutComponent,
+    ProjectsPageComponent,
   ],
   imports: [
     BrowserModule,
