@@ -19,6 +19,7 @@ import {LoginService} from "./shared/services/login.service";
 import {RefreshTokenInterceptor} from "./shared/interceptors/refresh-token-interceptor";
 import { LoginedLayoutComponent } from './shared/layouts/logined-layout/logined-layout.component';
 import { ProjectsPageComponent } from './projects-page/projects-page.component';
+import { CreationProjectFormComponent } from './creation-project-form/creation-project-form.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ProjectsPageComponent } from './projects-page/projects-page.component';
     RegistrationFormDirective,
     LoginedLayoutComponent,
     ProjectsPageComponent,
+    CreationProjectFormComponent,
   ],
   imports: [
     BrowserModule,

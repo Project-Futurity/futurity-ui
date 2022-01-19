@@ -1,0 +1,64 @@
+.card-img-top {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.card {
+  background: transparent;
+  min-width: 250px;
+  max-width: 250px;
+  border-radius: 20px;
+  border: 2px solid #FFFF00;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.card-title {
+  border-top: 2px solid #FFFF00;
+  border-bottom: 2px solid #FFFF00;
+  font-size: 24px;
+}
+
+.card-text {
+  color: #FFFF00;
+  font-size: 18px;
+  height: 150px;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.card:hover {
+  box-shadow: 0 0 7px 1px #FFFF00;
+}
+
+.plus-button {
+  width: 50px;
+  height: 50px;
+  bottom: 20px;
+  right: 35px;
+  background: transparent;
+  border: 2px solid #FFFF00;
+  transition: .3s;
+  color: #FFFF00;
+}
+
+.plus-sign {
+  font-size: 38px;
+  transition: .1s;
+}
+
+.plus-button:hover {
+  background-color: #FFFF00;
+  color: #282c35;
+}
+
+@media (max-width: 576px) {
+  .card {
+    min-width: 220px;
+    max-width: 220px;
+  }
+}
+

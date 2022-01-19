@@ -4,6 +4,7 @@ import {EmailService} from "../shared/services/email.service";
 import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 import {LoginService} from "../shared/services/login.service";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-page',
@@ -21,7 +22,7 @@ export class LoginPageComponent implements OnInit {
   loginInfo: string = null;
 
   constructor(private email: EmailService, private loginService: LoginService, private changeDetector: ChangeDetectorRef,
-              private alertConfigurator: AlertConfiguratorService) {}
+              private alertConfigurator: AlertConfiguratorService, private router: Router) {}
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -46,9 +47,7 @@ export class LoginPageComponent implements OnInit {
 
     this.loginService.login(this.loginForm.value).subscribe({
       next: () => {
-        // do something when success
-        this.loginInfo = "Success";
-        this.resolveAlert(AlertType.SUCCESS, () => this.loginInfo = null);
+        this.router.navigate(["/projects"]);
       },
       error: err => {
         this.loginInfo = err;

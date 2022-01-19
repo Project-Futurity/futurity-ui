@@ -7,11 +7,12 @@ import {RegistrationPageComponent} from "../registration-page/registration-page.
 import {LoginedLayoutComponent} from "../shared/layouts/logined-layout/logined-layout.component";
 import {ProjectsPageComponent} from "../projects-page/projects-page.component";
 import {LoginGuard} from "../shared/guards/login.guard";
+import {NotLoginedGuard} from "../shared/guards/not-logined.guard";
 
 
 const routes: Routes = [
   {
-    path: "", component: NotLoginedLayoutComponent, children: [
+    path: "", component: NotLoginedLayoutComponent, canActivate: [NotLoginedGuard], children: [
       {path: "", component: HomePageComponent},
       {path: "login", component: LoginPageComponent},
       {path: "singup", component: RegistrationPageComponent},

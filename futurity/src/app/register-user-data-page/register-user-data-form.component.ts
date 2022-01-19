@@ -6,6 +6,7 @@ import {RegistrationService} from "../shared/services/registration.service";
 import {RegistrationDto} from "../shared/dto/auth-dto";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
 import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register-user-data-page',
@@ -24,7 +25,8 @@ export class RegisterUserDataFormComponent implements OnInit {
   email: string;
 
   constructor(private avatarService: AvatarService, private registrationService: RegistrationService,
-              private alertConfigurator: AlertConfiguratorService,  private changeDetector: ChangeDetectorRef) {}
+              private alertConfigurator: AlertConfiguratorService,  private changeDetector: ChangeDetectorRef,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -64,9 +66,7 @@ export class RegisterUserDataFormComponent implements OnInit {
 
     this.registrationService.register(user, this.avatarService.getAvatar()).subscribe({
       next: () => {
-        // do something when success
-        this.registrationInfo = "Success";
-        this.resolveAlert(AlertType.SUCCESS, () => this.registrationInfo = null);
+        this.router.navigate(["/login"]);
       },
       error: err => {
         this.registrationInfo = err;
