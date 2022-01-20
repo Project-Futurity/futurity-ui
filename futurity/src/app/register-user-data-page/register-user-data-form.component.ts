@@ -41,7 +41,7 @@ export class RegisterUserDataFormComponent implements OnInit {
       ])
     });
 
-    this.avatarService.loadDefaultAvatar();
+    this.avatarService.loadDefaultAvatar("/assets/user.png");
   }
 
   onChangeAvatar(event: any) {

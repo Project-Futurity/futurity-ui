@@ -25,11 +25,11 @@
     <div class="position-relative mt-4 mb-3 input-width">
       <div class="background-text text-center">Choose project preview</div>
       <div class="wrapper mt-2">
-        <img class="img-fluid background" src="assets/code-project.jpeg">
+        <img class="img-fluid background" [src]="getAvatar()">
         <div class="upload-file-button d-flex align-items-center justify-content-center">
           <img class="img-fluid background" src="assets/project-plus.png">
         </div>
-        <input class="upload-file" type="file" accept=".png, .jpeg, .gif">
+        <input class="upload-file" type="file" accept=".png, .jpeg, .gif" (change)="onChangeAvatar($event)">
       </div>
     </div>
   </div>

@@ -6,7 +6,6 @@ import {FileMetaInfo} from "../interfaces/file-meta-info";
   providedIn: 'root'
 })
 export class AvatarService {
-  private readonly DEFAULT_IMAGE_URL = "/assets/user.png";
   private readonly ALLOWED_EXTENSIONS = ["jpeg", "png", "gif"];
   private readonly ALLOWED_SIZE = 5 * 1024 * 1024;
   private avatar: File = null;
@@ -27,8 +26,8 @@ export class AvatarService {
     this.fileReaderService.readFile(image).subscribe(file => this.setAvatar(file));
   }
 
-  loadDefaultAvatar() {
-    this.fileReaderService.loadFromUrl(this.DEFAULT_IMAGE_URL).subscribe(file => this.setAvatar(file));
+  loadDefaultAvatar(url: string) {
+    this.fileReaderService.loadFromUrl(url).subscribe(file => this.setAvatar(file));
   }
 
   getAvatarUrl() {
