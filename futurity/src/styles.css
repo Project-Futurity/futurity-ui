@@ -2,6 +2,7 @@
 @import "app/shared/styles/button.css";
 @import "app/shared/styles/checkbox.css";
 @import "app/shared/styles/auth-card.css";
+@import "app/shared/styles/file-uploader.css";
 
 body {
   background: #282c35;
