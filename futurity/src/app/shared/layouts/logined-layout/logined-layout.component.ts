@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 
 @Component({
@@ -8,12 +8,16 @@ import {UserService} from "../../services/user.service";
 })
 export class LoginedLayoutComponent implements OnInit {
   avatar: string;
+  avatarIsLoad = false;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
-    this.userService.loadAvatar().subscribe(file => this.avatar = file.url);
+    this.userService.loadAvatar().subscribe(file => {
+      this.avatar = file.url;
+      this.avatarIsLoad = true;
+    });
   }
 
   logout() {

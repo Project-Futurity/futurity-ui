@@ -22,6 +22,7 @@ import {ProjectsPageComponent} from './projects-page/projects-page.component';
 import {CreationProjectFormComponent} from './creation-project-form/creation-project-form.component';
 import {ContextMenuModule, ContextMenuService} from "ngx-contextmenu";
 import {ContextMenuFixService} from "./shared/services/context-menu-fix.service";
+import { AlertPopupComponent } from './alert-popup/alert-popup.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {ContextMenuFixService} from "./shared/services/context-menu-fix.service"
     LoginedLayoutComponent,
     ProjectsPageComponent,
     CreationProjectFormComponent,
+    AlertPopupComponent,
   ],
   imports: [
     BrowserModule,

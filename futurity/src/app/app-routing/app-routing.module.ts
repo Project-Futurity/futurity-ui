@@ -22,7 +22,7 @@ const routes: Routes = [
     path: "projects", component: LoginedLayoutComponent, canActivate: [LoginGuard], children: [
       {path: "", component: ProjectsPageComponent}
     ]
-  }
+  },
 ];
 
 @NgModule({

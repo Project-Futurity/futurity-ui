@@ -1,3 +1,6 @@
+import {Observable} from "rxjs";
+import {FileMetaInfo} from "../interfaces/file-meta-info";
+
 export interface CreationProjectDto {
   name: string;
   description: string;
@@ -16,4 +19,9 @@ export interface Project {
   name: string;
   description: string;
   previewUrl: string;
+}
+
+export interface ProjectWithPreview {
+  project: Project;
+  previewObs: Observable<FileMetaInfo>;
 }

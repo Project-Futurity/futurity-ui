@@ -2,33 +2,25 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
-import {catchError, map, tap} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {FileReaderService} from "./file-reader.service";
 import {CreationProjectDto, CreationProjectResponseDto, Project, ProjectResponseDto} from "../dto/project-dto";
+import {ProjectUi} from "../interfaces/project-ui";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private projects: Project[] = null;
   private url = "/project";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler, private readerService: FileReaderService) {
   }
 
-  loadProjects(): Observable<Project[]> {
-    if (this.projects) {
-      return new Observable(subscriber => {
-        subscriber.next(this.projects);
-        subscriber.complete();
-      })
-    } else {
-      return this.http.get<ProjectResponseDto>(this.url + "/projects").pipe(
-        catchError(this.errorHandler.handle),
-        map(projects => this.readProject(projects)),
-        tap(proj => this.projects = proj)
-      );
-    }
+  loadProjects(): Observable<ProjectUi[]> {
+    return this.http.get<ProjectResponseDto>(this.url + "/projects").pipe(
+      catchError(this.errorHandler.handle),
+      map(projects => this.readProject(projects))
+    );
   }
 
   createProject(request: CreationProjectDto, preview: File): Observable<number> {
@@ -52,18 +44,19 @@ export class ProjectService {
     );
   }
 
-  logout() {
-    this.projects = null;
-  }
+  private readProject(response: ProjectResponseDto): ProjectUi[] {
+    return response.projects.map(project => {
+      const projectUi: ProjectUi = {
+        project: project,
+        isPreviewLoad: false
+      };
 
-  private readProject(response: ProjectResponseDto): Project[] {
-    const projects = response.projects;
-    projects.forEach(project => {
       this.readerService.loadFromUrl(this.url + project.previewUrl).subscribe(file => {
-        project.previewUrl = file.url;
-      })
-    });
+        projectUi.project.previewUrl = file.url;
+        projectUi.isPreviewLoad = true;
+      });
 
-    return projects;
+      return projectUi;
+    });
   }
 }

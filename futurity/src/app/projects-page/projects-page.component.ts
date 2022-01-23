@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {CreationProjectFormComponent} from "../creation-project-form/creation-project-form.component";
 import {ProjectService} from "../shared/services/project.service";
 import {ContextMenuComponent} from "ngx-contextmenu";
-import {Project} from "../shared/dto/project-dto";
+import {AlertPopupComponent} from "../alert-popup/alert-popup.component";
+import {ProjectUi} from "../shared/interfaces/project-ui";
 
 @Component({
   selector: 'app-projects-page',
@@ -12,15 +13,24 @@ import {Project} from "../shared/dto/project-dto";
 })
 export class ProjectsPageComponent implements OnInit {
   readonly DESCRIBED_TEXT_LENGTH = 17;
+  projectsAreLoad = false;
   @ViewChild(ContextMenuComponent, {static: true}) basicMenu: ContextMenuComponent;
-  projects: Project[] = [];
+  projects: ProjectUi[] = [];
 
-  constructor(private modalService: NgbModal, private projectService: ProjectService) {}
+  constructor(private modalService: NgbModal, private projectService: ProjectService) {
+  }
 
   ngOnInit() {
-     this.projectService.loadProjects().subscribe(projects => {
-       this.projects = projects;
-     });
+    this.projectService.loadProjects().subscribe({
+      next: projects => {
+        this.projectsAreLoad = true;
+        this.projects = projects;
+      },
+      error: () => {
+        this.projectsAreLoad = true;
+        this.showPopupAlert("Can't load the projects. Something bad happened. Please try again later")
+      }
+    });
   }
 
   openCreationModal() {
@@ -30,14 +40,27 @@ export class ProjectsPageComponent implements OnInit {
       scrollable: false
     });
     const component = modal.componentInstance as CreationProjectFormComponent;
-    component.createProjectEvent.subscribe(project => {
-      this.projects.push(project);
+
+    component.createProjectEvent.subscribe(project => this.projects.push({
+      project: project,
+      isPreviewLoad: true
+    }));
+  }
+
+  deleteProject(project: ProjectUi) {
+    this.projectService.deleteProject(project.project.id).subscribe({
+      next: () => this.projects = this.projects.filter(p => project.project.id !== p.project.id),
+      error: () => this.showPopupAlert("Can't delete the project. Something bad happened. Please try again later")
     });
   }
 
-  deleteProject(project: Project) {
-    this.projectService.deleteProject(project.id).subscribe({
-      next: () => this.projects = this.projects.filter(p => project.id !== p.id)
-    })
+  private showPopupAlert(error: string) {
+    const modal = this.modalService.open(AlertPopupComponent, {
+      centered: true,
+      animation: true,
+      scrollable: false
+    });
+    const component = modal.componentInstance as AlertPopupComponent;
+    component.message = error;
   }
 }

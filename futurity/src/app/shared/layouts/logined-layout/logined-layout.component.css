@@ -9,10 +9,17 @@
   margin-left: 20px;
   height: 65px;
   width: 65px;
+  overflow: hidden;
 }
 
 .navbar-brand-name {
   color: #FFFF00;
   font-size: 32px;
   margin-left: 10px;
+}
+
+.text-warning {
+  color: #FFFF00 !important;
+  width: 100%;
+  height: 100%;
 }
