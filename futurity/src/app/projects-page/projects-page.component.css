@@ -55,10 +55,36 @@
   color: #282c35;
 }
 
+.text, a {
+  color: #FFFF00;
+  font-size: 28px;
+}
+
+a:hover {
+  color: #1b1e21;
+}
+
+::ng-deep .ngx-contextmenu .dropdown-menu {
+  background: #555557;
+  text-align: center;
+}
+
+::ng-deep .ngx-contextmenu a {
+  color: #FFFF00;
+}
+
+::ng-deep .ngx-contextmenu a:hover {
+  color: #282c35;
+}
+
 @media (max-width: 576px) {
   .card {
     min-width: 220px;
     max-width: 220px;
+  }
+
+  .text, a {
+    font-size: 22px;
   }
 }
 

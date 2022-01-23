@@ -17,9 +17,11 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
 import {LoginService} from "./shared/services/login.service";
 import {RefreshTokenInterceptor} from "./shared/interceptors/refresh-token-interceptor";
-import { LoginedLayoutComponent } from './shared/layouts/logined-layout/logined-layout.component';
-import { ProjectsPageComponent } from './projects-page/projects-page.component';
-import { CreationProjectFormComponent } from './creation-project-form/creation-project-form.component';
+import {LoginedLayoutComponent} from './shared/layouts/logined-layout/logined-layout.component';
+import {ProjectsPageComponent} from './projects-page/projects-page.component';
+import {CreationProjectFormComponent} from './creation-project-form/creation-project-form.component';
+import {ContextMenuModule, ContextMenuService} from "ngx-contextmenu";
+import {ContextMenuFixService} from "./shared/services/context-menu-fix.service";
 
 @NgModule({
   declarations: [
@@ -43,6 +45,7 @@ import { CreationProjectFormComponent } from './creation-project-form/creation-p
     ReactiveFormsModule,
     SimplebarAngularModule,
     HttpClientModule,
+    ContextMenuModule.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: () => localStorage.getItem(LoginService.TOKEN_KEY),
@@ -51,7 +54,8 @@ import { CreationProjectFormComponent } from './creation-project-form/creation-p
     }),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true }
+    {provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true},
+    {provide: ContextMenuService, useExisting: ContextMenuFixService}
   ],
   bootstrap: [AppComponent]
 })

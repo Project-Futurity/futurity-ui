@@ -1,8 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
 import {AvatarService} from "../shared/services/avatar.service";
+import {ProjectService} from "../shared/services/project.service";
+import {CreationProjectDto, Project} from "../shared/dto/project-dto";
 
 @Component({
   selector: 'app-creation-project-form',
@@ -14,9 +16,11 @@ export class CreationProjectFormComponent implements OnInit {
   disableCreationButton = false;
   projectInfo: string = null;
   @ViewChild("alert") alert: NgbAlert;
+  @Output() createProjectEvent = new EventEmitter<Project>();
 
   constructor(public activeModal: NgbActiveModal, private changeDetector: ChangeDetectorRef,
-              private alertConfigurator: AlertConfiguratorService, private avatarService: AvatarService) {
+              private alertConfigurator: AlertConfiguratorService, private avatarService: AvatarService,
+              private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
@@ -29,8 +33,28 @@ export class CreationProjectFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.projectInfo = "Something went wrong."
-    this.resolveAlert(AlertType.ERROR, () => this.projectInfo = null);
+    this.disableCreationButton = true;
+    const project: CreationProjectDto = {
+      name: this.projectForm.get("description").value,
+      description: this.projectForm.get("description").value
+    };
+
+    this.projectService.createProject(project, this.avatarService.getAvatar()).subscribe({
+      next: id => {
+        this.createProjectEvent.emit({
+          id: id,
+          name: project.name,
+          description: project.description,
+          previewUrl: this.avatarService.getAvatarUrl()
+        });
+
+        this.activeModal.close();
+      },
+      error: err => {
+        this.projectInfo = err;
+        this.resolveAlert(AlertType.ERROR, () => this.projectInfo = null);
+      }
+    })
   }
 
   onChangeAvatar(event: any) {
@@ -38,7 +62,7 @@ export class CreationProjectFormComponent implements OnInit {
 
     if (error) {
       this.projectInfo = error;
-      this.resolveAlert(AlertType.ERROR,() => this.projectInfo = null);
+      this.resolveAlert(AlertType.ERROR, () => this.projectInfo = null);
     }
   }
 

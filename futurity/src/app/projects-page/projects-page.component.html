@@ -1,15 +1,21 @@
 <div class="container-fluid px-5 d-flex align-items-center justify-content-center mt-5 flex-wrap">
-  <div class="card mx-5 mb-5" *ngFor="let project of projects">
-    <img class="card-img-top" [src]="project.imageUrl">
+  <div class="card mx-5 mb-5" *ngFor="let project of projects" [contextMenu]="basicMenu" [contextMenuSubject]="project">
+    <img class="card-img-top" [src]="project.previewUrl">
     <div class="card-body p-0">
       <div class="card-title text-center w-100 py-1 mb-0 text-nowrap overflow-hidden text-truncate cursor-pointer" [ngClass]="{
-        'px-2': project.title.length > DESCRIBED_TEXT_LENGTH
-      }" [ngbTooltip]="project.title.length > DESCRIBED_TEXT_LENGTH ? project.title : null">
-        {{project.title}}
+        'px-2': project.name.length > DESCRIBED_TEXT_LENGTH
+      }" [ngbTooltip]="project.name.length > DESCRIBED_TEXT_LENGTH ? project.name : null">
+        {{project.name}}
       </div>
       <p class="card-text text-center p-2 overflow-auto">
         {{project.description}}
       </p>
+    </div>
+  </div>
+
+  <div *ngIf="projects.length === 0">
+    <div class="text mt-3">You don't have any projects.
+      <a class="cursor-pointer" (click)="openCreationModal()">Do you want to create one?</a>
     </div>
   </div>
 </div>
@@ -19,3 +25,7 @@
 >
   <span class="plus-sign">+</span>
 </button>
+<context-menu>
+  <ng-template contextMenuItem (execute)="deleteProject($event.item)">Delete</ng-template>
+</context-menu>
+
