@@ -1,0 +1,82 @@
+.body-padding {
+  overflow: auto;
+  height: 80%;
+  padding: 0 100px;
+}
+
+.container-absolute {
+  top: 170px;
+  bottom: 0;
+}
+
+.body-padding > last-child {
+  margin-left: 100px;
+}
+
+.column {
+  min-width: 350px;
+  max-height: 100%;
+  border-radius: 10px;
+  margin-right: 100px;
+  background: rgb(70, 70, 70);
+  color: #dadada;
+  font-size: 24px;
+  box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.164);
+}
+
+.column:last-child {
+  margin-right: 0;
+}
+
+.list {
+  overflow: auto;
+  border-radius: 5px;
+  min-height: 60px;
+}
+
+::ng-deep .body-padding::-webkit-scrollbar { width: 0 !important }
+::ng-deep .list::-webkit-scrollbar { width: 0 !important }
+
+.box {
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: move;
+  background: rgb(94, 93, 93);
+  color: #dadada;
+  margin-top: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.list .cdk-drag-placeholder {
+  background: rgb(65, 65, 65);
+  opacity: 0.5;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.box:last-child {
+  border: none;
+}
+
+.list.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+

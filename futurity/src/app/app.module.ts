@@ -22,7 +22,10 @@ import {ProjectsPageComponent} from './projects-page/projects-page.component';
 import {CreationProjectFormComponent} from './creation-project-form/creation-project-form.component';
 import {ContextMenuModule, ContextMenuService} from "ngx-contextmenu";
 import {ContextMenuFixService} from "./shared/services/context-menu-fix.service";
-import { AlertPopupComponent } from './alert-popup/alert-popup.component';
+import {AlertPopupComponent} from './alert-popup/alert-popup.component';
+import {KanbanPageComponent} from './kanban-page/kanban-page.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
 
 @NgModule({
   declarations: [
@@ -38,6 +41,8 @@ import { AlertPopupComponent } from './alert-popup/alert-popup.component';
     ProjectsPageComponent,
     CreationProjectFormComponent,
     AlertPopupComponent,
+    KanbanPageComponent,
+    DragScrollDirective
   ],
   imports: [
     BrowserModule,
@@ -54,6 +59,7 @@ import { AlertPopupComponent } from './alert-popup/alert-popup.component';
         // here you can add allowed
       },
     }),
+    DragDropModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true},

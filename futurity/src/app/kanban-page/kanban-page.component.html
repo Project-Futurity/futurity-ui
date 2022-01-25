@@ -1,0 +1,15 @@
+<div class="position-absolute h-100 w-100 container-absolute">
+  <div cdkDropList cdkDropListGroup cdkDropListOrientation="horizontal"
+       [cdkDropListData]="columns" (cdkDropListDropped)="drop($event)"
+       class="container-fluid d-flex align-items-start body-padding"
+       [cdkDropListAutoScrollStep]="10" cdkScrollable #container dragScroll [drag-scroll-disable]="['column']">
+    <div class="column text-center p-3" *ngFor="let column of columns" cdkDrag cdkScrollable>
+      <h4 class="mt-2 mb-2">{{column.name}}</h4>
+      <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="drop($event)"
+           cdkScrollable [cdkDropListAutoScrollStep]="10"
+           [ngStyle]="{'max-height': (container.offsetHeight - 100) + 'px'}">
+        <div class="box" *ngFor="let item of column.tasks" cdkDrag>{{item}}</div>
+      </div>
+    </div>
+  </div>
+</div>
