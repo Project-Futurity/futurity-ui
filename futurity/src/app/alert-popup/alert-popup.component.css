@@ -1,3 +1,7 @@
+::ng-deep .modal-dialog {
+  margin: auto !important;
+}
+
 .modal-header {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;

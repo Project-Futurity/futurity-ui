@@ -2,6 +2,8 @@
   overflow: auto;
   height: 80%;
   padding: 0 100px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .container-absolute {
@@ -31,14 +33,16 @@
 .list {
   overflow: auto;
   border-radius: 5px;
-  min-height: 60px;
+  min-height: 1px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 ::ng-deep .body-padding::-webkit-scrollbar { width: 0 !important }
 ::ng-deep .list::-webkit-scrollbar { width: 0 !important }
 
 .box {
-  padding: 10px 10px;
+  padding: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -50,6 +54,26 @@
   margin-top: 10px;
   font-size: 18px;
   border-radius: 5px;
+}
+
+.add {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #1b1e21 !important;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.add:hover {
+  border-color: #999999 !important;
+}
+
+.box-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  color: #dadada;
 }
 
 .cdk-drag-preview {
@@ -76,7 +100,31 @@
   border: none;
 }
 
+.column-add {
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid #999999 !important;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.column-add:hover {
+  border-color: #1b1e21 !important;
+}
+
 .list.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+::ng-deep .ngx-contextmenu .dropdown-menu {
+  background: #555557;
+  text-align: center;
+}
+
+::ng-deep .ngx-contextmenu a {
+  color: #FFFF00;
+}
+
+::ng-deep .ngx-contextmenu a:hover {
+  color: #282c35;
+}
