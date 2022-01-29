@@ -1,5 +1,7 @@
 <div class="container-fluid px-5 d-flex align-items-center justify-content-center mt-5 flex-wrap">
-  <div class="card mx-5 mb-5" *ngFor="let project of projects" [contextMenu]="basicMenu" [contextMenuSubject]="project">
+  <div class="card mx-5 mb-5" *ngFor="let project of projects" [contextMenu]="basicMenu" [contextMenuSubject]="project"
+    (click)="navigateToProject(project.project)"
+  >
     <div class="card-img-top d-flex align-items-center justify-content-center">
       <img class="preview" [src]="project.project.previewUrl" *ngIf="project.isPreviewLoad">
       <div class="spinner-grow text-warning" role="status" *ngIf="!project.isPreviewLoad"></div>

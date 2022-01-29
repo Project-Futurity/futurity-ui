@@ -7,7 +7,7 @@
          [contextMenu]="basicMenu" [contextMenuSubject]="column"
     >
       <h4 class="mt-2 mb-2">{{column.name}}</h4>
-      <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="drop($event)"
+      <!--<div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="drop($event)"
            cdkScrollable [cdkDropListAutoScrollStep]="10"
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
         <div class="box" *ngFor="let task of column.tasks" cdkDrag [contextMenu]="basicMenu"
@@ -19,7 +19,7 @@
       <div class="box add" (click)="startCreateTask(column)"
            *ngIf="!creationNewTask || column.index !== creationColumnIndex"
       >+
-      </div>
+      </div>-->
     </div>
     <div class="column text-center p-3" *ngIf="creationNewColumn">
         <input type="text" class="mt-2 mb-2 box-input" (blur)="creationColumnUnFocus($event)" #input_column>

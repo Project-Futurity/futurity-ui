@@ -1,17 +1,19 @@
-import {Observable} from "rxjs";
-import {FileMetaInfo} from "../interfaces/file-meta-info";
-
 export interface CreationProjectDto {
   name: string;
   description: string;
 }
 
-export interface CreationProjectResponseDto {
+export interface CreationColumnDto {
+  name: string;
   projectId: number;
 }
 
-export interface ProjectResponseDto {
-  projects: Project[];
+export interface IdResponse {
+  id: number;
+}
+
+export interface ListResponse<T> {
+  values: T[];
 }
 
 export interface Project {
@@ -21,7 +23,14 @@ export interface Project {
   previewUrl: string;
 }
 
-export interface ProjectWithPreview {
-  project: Project;
-  previewObs: Observable<FileMetaInfo>;
+export interface ProjectColumn {
+  id: number;
+  name: string;
+  index?: number;
+}
+
+export interface ChangeColumnIndexRequest {
+  from: number;
+  to: number;
+  projectId: number;
 }

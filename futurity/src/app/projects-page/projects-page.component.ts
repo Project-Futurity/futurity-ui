@@ -5,6 +5,8 @@ import {ProjectService} from "../shared/services/project.service";
 import {ContextMenuComponent} from "ngx-contextmenu";
 import {AlertPopupComponent} from "../alert-popup/alert-popup.component";
 import {ProjectUi} from "../shared/interfaces/project-ui";
+import {Project} from "../shared/dto/project-dto";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-projects-page',
@@ -17,7 +19,7 @@ export class ProjectsPageComponent implements OnInit {
   @ViewChild(ContextMenuComponent, {static: true}) basicMenu: ContextMenuComponent;
   projects: ProjectUi[] = [];
 
-  constructor(private modalService: NgbModal, private projectService: ProjectService) {
+  constructor(private modalService: NgbModal, private projectService: ProjectService, private router: Router) {
   }
 
   ngOnInit() {
@@ -52,6 +54,10 @@ export class ProjectsPageComponent implements OnInit {
       next: () => this.projects = this.projects.filter(p => project.project.id !== p.project.id),
       error: () => this.showPopupAlert("Can't delete the project. Something bad happened. Please try again later")
     });
+  }
+
+  navigateToProject(project: Project) {
+    this.router.navigate(["projects/board", project.id]);
   }
 
   private showPopupAlert(error: string) {

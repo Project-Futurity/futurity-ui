@@ -20,9 +20,9 @@ const routes: Routes = [
     ]
   },
   {
-    path: "projects", component: LoginedLayoutComponent, canActivate: [LoginGuard], children: [
+    path: "projects", component: LoginedLayoutComponent, children: [
       {path: "", component: ProjectsPageComponent},
-      {path: "task", component: KanbanPageComponent}
+      {path: "board/:id", component: KanbanPageComponent}
     ]
   },
 ];

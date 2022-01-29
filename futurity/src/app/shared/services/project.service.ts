@@ -4,7 +4,7 @@ import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {FileReaderService} from "./file-reader.service";
-import {CreationProjectDto, CreationProjectResponseDto, Project, ProjectResponseDto} from "../dto/project-dto";
+import {CreationProjectDto, IdResponse, ListResponse, Project} from "../dto/project-dto";
 import {ProjectUi} from "../interfaces/project-ui";
 
 @Injectable({
@@ -17,7 +17,7 @@ export class ProjectService {
   }
 
   loadProjects(): Observable<ProjectUi[]> {
-    return this.http.get<ProjectResponseDto>(this.url + "/projects").pipe(
+    return this.http.get<ListResponse<Project>>(this.url + "/projects").pipe(
       catchError(this.errorHandler.handle),
       map(projects => this.readProject(projects))
     );
@@ -32,8 +32,8 @@ export class ProjectService {
       {type: "application/json"})
     );
 
-    return this.http.post<CreationProjectResponseDto>(this.url + "/create", form).pipe(
-      map(response => response.projectId),
+    return this.http.post<IdResponse>(this.url + "/create", form).pipe(
+      map(response => response.id),
       catchError(this.errorHandler.handle)
     )
   }
@@ -44,8 +44,8 @@ export class ProjectService {
     );
   }
 
-  private readProject(response: ProjectResponseDto): ProjectUi[] {
-    return response.projects.map(project => {
+  private readProject(response: ListResponse<Project>): ProjectUi[] {
+    return response.values.map(project => {
       const projectUi: ProjectUi = {
         project: project,
         isPreviewLoad: false
