@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {
   ChangeColumnIndexRequest,
-  CreationColumnDto,
-  IdResponse,
-  ListResponse,
-  Project,
+  CreationColumnDto, DeletingColumnDto,
   ProjectColumn
 } from "../dto/project-dto";
 import {Observable} from "rxjs";
@@ -23,25 +20,36 @@ export class ColumnService {
   getColumns(projectId: number): Observable<ProjectColumn[]> {
     const url = this.url + "/" + projectId + "/";
 
-    return this.http.get<ListResponse<ProjectColumn>>(url).pipe(
+    return this.http.get<ProjectColumn[]>(url).pipe(
       catchError(this.errorHandler.handle),
-      map(list => list.values)
     );
   }
 
   createColumn(request: CreationColumnDto): Observable<number> {
     const url = this.url + "/" + request.projectId + "/create";
+    let params = new HttpParams();
+    params = params.append('columnName', request.name);
 
-    return this.http.post<IdResponse>(url, {name: request.name}).pipe(
-      catchError(this.errorHandler.handle),
-      map(response => response.id)
+    return this.http.post<number>(url, params).pipe(
+      catchError(this.errorHandler.handle)
     );
   }
 
-  changeColumnIndex(request: ChangeColumnIndexRequest) {
-    const url = this.url + "/" + request.projectId + "/index/change";
+  deleteColumn(request: DeletingColumnDto): Observable<void> {
+    const url = this.url + "/" + request.projectId + "/delete/" + request.index;
 
-    return this.http.patch(url, {from: request.from, to: request.to}).pipe(
+    return this.http.delete<void>(url).pipe(
+      catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeColumnIndex(request: ChangeColumnIndexRequest): Observable<void> {
+    const url = this.url + "/" + request.projectId + "/index/change";
+    let params = new HttpParams();
+    params = params.append('from', request.from);
+    params = params.append('to', request.to);
+
+    return this.http.patch<void>(url, params).pipe(
       catchError(this.errorHandler.handle)
     );
   }

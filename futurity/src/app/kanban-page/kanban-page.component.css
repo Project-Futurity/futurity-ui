@@ -119,6 +119,8 @@
 ::ng-deep .ngx-contextmenu .dropdown-menu {
   background: #555557;
   text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 ::ng-deep .ngx-contextmenu a {

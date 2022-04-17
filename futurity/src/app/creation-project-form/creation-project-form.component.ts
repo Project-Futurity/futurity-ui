@@ -35,7 +35,7 @@ export class CreationProjectFormComponent implements OnInit {
   onSubmit() {
     this.disableCreationButton = true;
     const project: CreationProjectDto = {
-      name: this.projectForm.get("description").value,
+      name: this.projectForm.get("name").value,
       description: this.projectForm.get("description").value
     };
 

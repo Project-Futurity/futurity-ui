@@ -3,19 +3,6 @@ export interface CreationProjectDto {
   description: string;
 }
 
-export interface CreationColumnDto {
-  name: string;
-  projectId: number;
-}
-
-export interface IdResponse {
-  id: number;
-}
-
-export interface ListResponse<T> {
-  values: T[];
-}
-
 export interface Project {
   id: number;
   name: string;
@@ -26,7 +13,16 @@ export interface Project {
 export interface ProjectColumn {
   id: number;
   name: string;
-  index?: number;
+}
+
+export interface CreationColumnDto {
+  name: string;
+  projectId: number;
+}
+
+export interface DeletingColumnDto {
+  index: number;
+  projectId: number;
 }
 
 export interface ChangeColumnIndexRequest {

@@ -24,7 +24,8 @@ export class KanbanPageComponent implements OnInit {
   columns: ProjectColumn[] = [];
 
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
-              private columnService: ColumnService) {}
+              private columnService: ColumnService) {
+  }
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get("id") as unknown as number;
@@ -36,13 +37,20 @@ export class KanbanPageComponent implements OnInit {
 
   drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
-      this.columnService.changeColumnIndex({
-        from: event.previousIndex + 1,
-        to: event.currentIndex + 1,
-        projectId: this.projectId
-      }).subscribe({
-        next: () => moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
-      });
+      const previousIndex = event.previousIndex;
+      const currentIndex = event.currentIndex;
+
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
+      if (event.previousIndex != event.currentIndex) {
+        this.columnService.changeColumnIndex({
+          from: event.previousIndex,
+          to: event.currentIndex,
+          projectId: this.projectId
+        }).subscribe({
+          error: () => moveItemInArray(event.container.data, currentIndex, previousIndex)
+        });
+      }
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -74,9 +82,14 @@ export class KanbanPageComponent implements OnInit {
     const column = event.target.value as string;
 
     if (column) {
+      let columnToAdd = {name: column, id: -1};
+      const index = this.columns.push(columnToAdd) - 1;
+
       this.columnService.createColumn({projectId: this.projectId, name: column}).subscribe({
-        next: id => {
-          this.columns.push({name: column, id: id});
+        next: id => columnToAdd.id = id,
+        error: err => {
+          // todo: handle error
+          this.columns.splice(index, 1);
         }
       })
     }
@@ -85,10 +98,19 @@ export class KanbanPageComponent implements OnInit {
   }
 
   delete(value: any) {
-  /*  if (value.index) {
+    if (value) {
       // deleting column
-      this.columns = this.columns.filter(column => column.index !== value.index);
-    } else {
+      const index = this.columns.indexOf(value);
+      this.columns.splice(index, 1);
+
+      this.columnService.deleteColumn({index: index, projectId: this.projectId}).subscribe({
+        error: err => {
+          // todo: handle error
+          this.columns.splice(index, 0, value);
+        }
+      });
+    }
+    /*else {
       // deleting task
       this.columns.forEach(column => {
         column.tasks = column.tasks.filter(task => task.name !== value.name)
@@ -96,12 +118,12 @@ export class KanbanPageComponent implements OnInit {
     }*/
   }
 
- /* startCreateTask(column: Column) {
-    this.creationNewTask = true;
-    this.creationColumnIndex = column.index;
-    this.changeDetector.detectChanges();
-    this.creationTaskInput.nativeElement.focus();
-  }*/
+  /* startCreateTask(column: Column) {
+     this.creationNewTask = true;
+     this.creationColumnIndex = column.index;
+     this.changeDetector.detectChanges();
+     this.creationTaskInput.nativeElement.focus();
+   }*/
 
   startCreateColumn() {
     this.creationNewColumn = true;
