@@ -4,8 +4,8 @@ import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {FileReaderService} from "./file-reader.service";
-import {CreationProjectDto, Project} from "../dto/project-dto";
-import {ProjectUi} from "../interfaces/project-ui";
+import {CreationProjectDto} from "../dto/project-dto";
+import {Project, ProjectUi} from "../interfaces/project-ui";
 
 @Injectable({
   providedIn: 'root'

@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {
-  ChangeColumnIndexRequest,
+  ChangeColumnIndexDto,
   CreationColumnDto, DeletingColumnDto,
-  ProjectColumn
 } from "../dto/project-dto";
 import {Observable} from "rxjs";
 import {ErrorHandler} from "./error-handler";
-import {catchError, map} from "rxjs/operators";
+import {catchError} from "rxjs/operators";
+import {ProjectColumn} from "../interfaces/project-ui";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColumnService {
-  private url = "/project/column";
+  private readonly url = "/project/column";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 
@@ -43,7 +43,7 @@ export class ColumnService {
     );
   }
 
-  changeColumnIndex(request: ChangeColumnIndexRequest): Observable<void> {
+  changeColumnIndex(request: ChangeColumnIndexDto): Observable<void> {
     const url = this.url + "/" + request.projectId + "/index/change";
     let params = new HttpParams();
     params = params.append('from', request.from);

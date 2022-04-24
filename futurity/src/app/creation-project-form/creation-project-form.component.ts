@@ -4,7 +4,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
 import {AvatarService} from "../shared/services/avatar.service";
 import {ProjectService} from "../shared/services/project.service";
-import {CreationProjectDto, Project} from "../shared/dto/project-dto";
+import {CreationProjectDto} from "../shared/dto/project-dto";
+import {Project} from "../shared/interfaces/project-ui";
 
 @Component({
   selector: 'app-creation-project-form',

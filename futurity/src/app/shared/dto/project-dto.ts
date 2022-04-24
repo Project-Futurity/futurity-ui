@@ -3,18 +3,6 @@ export interface CreationProjectDto {
   description: string;
 }
 
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
-  previewUrl: string;
-}
-
-export interface ProjectColumn {
-  id: number;
-  name: string;
-}
-
 export interface CreationColumnDto {
   name: string;
   projectId: number;
@@ -25,8 +13,27 @@ export interface DeletingColumnDto {
   projectId: number;
 }
 
-export interface ChangeColumnIndexRequest {
+export interface ChangeColumnIndexDto {
   from: number;
   to: number;
   projectId: number;
+}
+
+export interface CreationTaskDto {
+  projectId: number;
+  columnIndex: number;
+  taskName: string;
+}
+
+export interface DeletingTaskDto {
+  projectId: number;
+  columnIndex: number;
+  taskIndex: number;
+}
+
+export interface ChangeTaskIndexDto {
+  fromColumn: number;
+  toColumn: number;
+  from: number;
+  to: number;
 }

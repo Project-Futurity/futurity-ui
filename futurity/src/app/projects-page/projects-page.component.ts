@@ -4,8 +4,7 @@ import {CreationProjectFormComponent} from "../creation-project-form/creation-pr
 import {ProjectService} from "../shared/services/project.service";
 import {ContextMenuComponent} from "ngx-contextmenu";
 import {AlertPopupComponent} from "../alert-popup/alert-popup.component";
-import {ProjectUi} from "../shared/interfaces/project-ui";
-import {Project} from "../shared/dto/project-dto";
+import {Project, ProjectUi} from "../shared/interfaces/project-ui";
 import {Router} from "@angular/router";
 
 @Component({
