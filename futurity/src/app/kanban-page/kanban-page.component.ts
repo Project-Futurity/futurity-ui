@@ -5,6 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {ColumnService} from "../shared/services/column.service";
 import {TaskService} from "../shared/services/task.service";
 import {ProjectColumn, Task} from "../shared/interfaces/project-ui";
+import {ErrorHandler} from "../shared/services/error-handler";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-kanban-page',
@@ -25,14 +27,15 @@ export class KanbanPageComponent implements OnInit {
   columns: ProjectColumn[] = [];
 
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
-              private columnService: ColumnService, private taskService: TaskService) {
+              private columnService: ColumnService, private taskService: TaskService, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get("id") as unknown as number;
 
     this.columnService.getColumns(this.projectId).subscribe({
-      next: columns => this.columns = columns
+      next: columns => this.columns = columns,
+      error: () => ErrorHandler.showPopupAlert("Can't load the columns.", this.modalService)
     });
   }
 
@@ -49,15 +52,18 @@ export class KanbanPageComponent implements OnInit {
           to: event.currentIndex,
           projectId: this.projectId
         }).subscribe({
-          error: () => moveItemInArray(event.container.data, currentIndex, previousIndex)
+          error: () => {
+            ErrorHandler.showPopupAlert("Can't move the column.", this.modalService);
+            moveItemInArray(event.container.data, currentIndex, previousIndex)
+          }
         });
+      } else {
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
-    } else {
-      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
   }
 
-  dropTask(event: CdkDragDrop<any[]>) {
+  dropTask(event: CdkDragDrop<any[]>, columnTo: number) {
     if (event.previousContainer === event.container) {
       const previousIndex = event.previousIndex;
       const currentIndex = event.currentIndex;
@@ -65,35 +71,33 @@ export class KanbanPageComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 
       if (event.previousIndex != event.currentIndex) {
-        const containerIndex = this.readIndexFromId(event.container.id);
-
         this.taskService.changeTaskIndex(this.projectId, {
-          fromColumn: containerIndex,
-          toColumn: containerIndex,
+          fromColumn: columnTo,
+          toColumn: columnTo,
           from: event.previousIndex,
           to: event.currentIndex
         }).subscribe({
           error: () => {
-            // todo: handle error
-            moveItemInArray(event.container.data, currentIndex, previousIndex)
+            ErrorHandler.showPopupAlert("Can't move the task.", this.modalService);
+            moveItemInArray(event.container.data, currentIndex, previousIndex);
           }
         });
       }
-
     } else {
-      const previousContainerIndex = this.readIndexFromId(event.previousContainer.id);
-      const currentContainerIndex = this.readIndexFromId(event.container.id);
+      const previous = event.previousContainer.data;
+      const columnFrom = this.columns.findIndex(column => column.tasks.length == previous.length
+        && column.tasks.every((elem, index) => elem == previous[index]));
 
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
 
       this.taskService.changeTaskIndex(this.projectId, {
-        fromColumn: previousContainerIndex,
-        toColumn: currentContainerIndex,
+        fromColumn: columnFrom,
+        toColumn: columnTo,
         from: event.previousIndex,
         to: event.currentIndex
       }).subscribe({
         error: () => {
-          // todo: handle error
+          ErrorHandler.showPopupAlert("Can't move the task.", this.modalService);
           transferArrayItem(event.container.data, event.previousContainer.data, event.currentIndex, event.previousIndex);
         }
       });
@@ -116,8 +120,8 @@ export class KanbanPageComponent implements OnInit {
             };
 
             this.taskService.createTask(request).subscribe({
-              error: err => {
-                // todo: handle error
+              error: () => {
+                ErrorHandler.showPopupAlert("Can't create the task.", this.modalService);
                 this.columns.splice(index, 1);
               }
             })
@@ -138,8 +142,8 @@ export class KanbanPageComponent implements OnInit {
       const index = this.columns.push(columnToAdd) - 1;
 
       this.columnService.createColumn({projectId: this.projectId, name: column}).subscribe({
-        error: err => {
-          // todo: handle error
+        error: () => {
+          ErrorHandler.showPopupAlert("Can't create the column.", this.modalService);
           this.columns.splice(index, 1);
         }
       })
@@ -155,8 +159,8 @@ export class KanbanPageComponent implements OnInit {
       this.columns.splice(index, 1);
 
       this.columnService.deleteColumn({index: index, projectId: this.projectId}).subscribe({
-        error: err => {
-          // todo: handle error
+        error: () => {
+          ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
           this.columns.splice(index, 0, value);
         }
       });
@@ -169,8 +173,8 @@ export class KanbanPageComponent implements OnInit {
         taskIndex: index, projectId: this.projectId,
         columnIndex: value.columnIndex
       }).subscribe({
-        error: err => {
-          // todo: handle error
+        error: () => {
+          ErrorHandler.showPopupAlert("Can't delete the task.", this.modalService);
           this.columns[value.columnIndex].tasks.splice(index, 0, value);
         }
       })
@@ -188,10 +192,5 @@ export class KanbanPageComponent implements OnInit {
     this.creationNewColumn = true;
     this.changeDetector.detectChanges();
     this.creationColumnInput.nativeElement.focus();
-  }
-
-
-  private readIndexFromId(id: string): number {
-    return +id.substring(id.lastIndexOf('-') + 1) - 1;
   }
 }

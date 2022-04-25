@@ -3,11 +3,11 @@
        [cdkDropListData]="columns" (cdkDropListDropped)="dropColumn($event)"
        class="container-fluid d-flex align-items-start body-padding"
        [cdkDropListAutoScrollStep]="10" cdkScrollable #container dragScroll [drag-scroll-disable]="['column']">
-    <div class="column text-center p-3" *ngFor="let column of columns" cdkDrag cdkScrollable
+    <div class="column text-center p-3" *ngFor="let column of columns; let i = index" cdkDrag cdkScrollable
          [contextMenu]="basicMenu" [contextMenuSubject]="column"
     >
       <h4 class="mt-2 mb-2">{{column.name}}</h4>
-      <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event)"
+      <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event, i)"
            cdkScrollable [cdkDropListAutoScrollStep]="10"
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
         <div class="box" *ngFor="let task of column.tasks" cdkDrag [contextMenu]="basicMenu"

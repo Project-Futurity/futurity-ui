@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {CreationProjectFormComponent} from "../creation-project-form/creation-project-form.component";
 import {ProjectService} from "../shared/services/project.service";
 import {ContextMenuComponent} from "ngx-contextmenu";
-import {AlertPopupComponent} from "../alert-popup/alert-popup.component";
 import {Project, ProjectUi} from "../shared/interfaces/project-ui";
 import {Router} from "@angular/router";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ErrorHandler} from "../shared/services/error-handler";
 
 @Component({
   selector: 'app-projects-page',
@@ -29,7 +29,7 @@ export class ProjectsPageComponent implements OnInit {
       },
       error: () => {
         this.projectsAreLoad = true;
-        this.showPopupAlert("Can't load the projects. Something bad happened. Please try again later")
+        ErrorHandler.showPopupAlert("Can't load the projects.", this.modalService)
       }
     });
   }
@@ -51,21 +51,11 @@ export class ProjectsPageComponent implements OnInit {
   deleteProject(project: ProjectUi) {
     this.projectService.deleteProject(project.project.id).subscribe({
       next: () => this.projects = this.projects.filter(p => project.project.id !== p.project.id),
-      error: () => this.showPopupAlert("Can't delete the project. Something bad happened. Please try again later")
+      error: () => ErrorHandler.showPopupAlert("Can't delete the project.", this.modalService)
     });
   }
 
   navigateToProject(project: Project) {
     this.router.navigate(["projects/board", project.id]);
-  }
-
-  private showPopupAlert(error: string) {
-    const modal = this.modalService.open(AlertPopupComponent, {
-      centered: true,
-      animation: true,
-      scrollable: false
-    });
-    const component = modal.componentInstance as AlertPopupComponent;
-    component.message = error;
   }
 }
