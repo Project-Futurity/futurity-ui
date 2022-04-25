@@ -13,16 +13,22 @@
         <div class="box" *ngFor="let task of column.tasks" cdkDrag [contextMenu]="basicMenu"
              [contextMenuSubject]="task">{{task.name}}</div>
       </div>
-      <div class="box" *ngIf="creationNewTask && this.columns.indexOf(column) === creationColumnIndex">
-        <input class="box-input" type="text" (blur)="creationTaskUnFocus($event)" #input_box>
+      <div class="box" *ngIf="creationNewTask && i === creationColumnIndex">
+        <input class="box-input" type="text"
+               (blur)="creationTaskUnFocus($event)"
+               (keyup.enter)="creationTaskUnFocus($event)"
+               (keyup.escape)="abortTaskCreation()" #input_box>
       </div>
-      <div class="box add" (click)="startCreateTask(column)"
-           *ngIf="!creationNewTask || this.columns.indexOf(column) !== creationColumnIndex"
+      <div class="box add" (click)="startCreateTask(i)"
+           *ngIf="!creationNewTask || i !== creationColumnIndex"
       >+
       </div>
     </div>
     <div class="column text-center p-3" *ngIf="creationNewColumn">
-        <input type="text" class="mt-2 mb-2 box-input" (blur)="creationColumnUnFocus($event)" #input_column>
+        <input type="text" class="mt-2 mb-2 box-input"
+               (blur)="creationColumnUnFocus($event)"
+               (keyup.enter)="creationColumnUnFocus($event)"
+               (keyup.escape)="abortColumnCreation()" #input_column>
     </div>
     <div class="column text-center p-3 column-add" (click)="startCreateColumn()"
          *ngIf="!creationNewColumn">

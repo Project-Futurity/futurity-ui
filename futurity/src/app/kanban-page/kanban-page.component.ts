@@ -107,7 +107,7 @@ export class KanbanPageComponent implements OnInit {
   creationTaskUnFocus(event: any) {
     const task = event.target.value as string;
 
-    if (task) {
+    if (task && this.creationNewTask) {
       this.columns.forEach((column, index) => {
         if (index === this.creationColumnIndex) {
           if (task != '+') {
@@ -130,6 +130,10 @@ export class KanbanPageComponent implements OnInit {
       });
     }
 
+    this.abortTaskCreation();
+  }
+
+  abortTaskCreation() {
     this.creationColumnIndex = -1;
     this.creationNewTask = false;
   }
@@ -137,7 +141,7 @@ export class KanbanPageComponent implements OnInit {
   creationColumnUnFocus(event: any) {
     const column = event.target.value as string;
 
-    if (column) {
+    if (column && this.creationNewColumn) {
       let columnToAdd: ProjectColumn = {name: column, tasks: []};
       const index = this.columns.push(columnToAdd) - 1;
 
@@ -149,6 +153,10 @@ export class KanbanPageComponent implements OnInit {
       })
     }
 
+    this.abortColumnCreation()
+  }
+
+  abortColumnCreation() {
     this.creationNewColumn = false;
   }
 
@@ -181,9 +189,9 @@ export class KanbanPageComponent implements OnInit {
     }
   }
 
-  startCreateTask(column: ProjectColumn) {
+  startCreateTask(index: number) {
     this.creationNewTask = true;
-    this.creationColumnIndex = this.columns.indexOf(column);
+    this.creationColumnIndex = index;
     this.changeDetector.detectChanges();
     this.creationTaskInput.nativeElement.focus();
   }
