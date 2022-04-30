@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CreationProjectFormComponent} from "../creation-project-form/creation-project-form.component";
 import {ProjectService} from "../shared/services/project.service";
 import {ContextMenuComponent} from "ngx-contextmenu";
@@ -18,7 +18,16 @@ export class ProjectsPageComponent implements OnInit {
   @ViewChild(ContextMenuComponent, {static: true}) basicMenu: ContextMenuComponent;
   projects: ProjectUi[] = [];
 
-  constructor(private modalService: NgbModal, private projectService: ProjectService, private router: Router) {
+  changingProjectName = false;
+  changingProjectNameIndex = -1;
+  @ViewChild("input_project_name_change") changingProjectNameInput: ElementRef;
+
+  changingProjectDescription = false;
+  changingProjectDescriptionIndex = -1;
+  @ViewChild("input_project_description_change") changingProjectDescriptionInput: ElementRef;
+
+  constructor(private modalService: NgbModal, private projectService: ProjectService, private router: Router,
+              private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -49,13 +58,80 @@ export class ProjectsPageComponent implements OnInit {
   }
 
   deleteProject(project: ProjectUi) {
+    const index = this.projects.indexOf(project);
+    this.projects.splice(index, 1);
+
     this.projectService.deleteProject(project.project.id).subscribe({
-      next: () => this.projects = this.projects.filter(p => project.project.id !== p.project.id),
-      error: () => ErrorHandler.showPopupAlert("Can't delete the project.", this.modalService)
+      error: () => {
+        this.projects.splice(index, 0, project);
+        ErrorHandler.showPopupAlert("Can't delete the project.", this.modalService)
+      }
     });
   }
 
   navigateToProject(project: Project) {
-    this.router.navigate(["projects/board", project.id]);
+    if (!this.changingProjectName && !this.changingProjectDescription) {
+      this.router.navigate(["projects/board", project.id]);
+    }
+  }
+
+  startChangingProjectName(project: ProjectUi) {
+    this.changingProjectName = true;
+    this.changingProjectNameIndex = this.projects.indexOf(project);
+    this.changeDetector.detectChanges();
+    this.changingProjectNameInput.nativeElement.focus();
+  }
+
+  abortChangingProjectName() {
+    this.changingProjectName = false;
+    this.changingProjectNameIndex = -1;
+  }
+
+  changeProjectName(event: any, projectIndex: number) {
+    const name = event.target.value as string;
+
+    if (name && this.changingProjectName) {
+      const previousName = this.projects[projectIndex].project.name;
+      this.projects[projectIndex].project.name = name;
+
+      this.projectService.changeProjectName(projectIndex, name).subscribe({
+        error: () => {
+          this.projects[projectIndex].project.name = previousName;
+          ErrorHandler.showPopupAlert("Can't rename the project.", this.modalService)
+        }
+      });
+    }
+
+    this.abortChangingProjectName();
+  }
+
+  startChangingProjectDescription(project: ProjectUi) {
+    this.changingProjectDescriptionIndex = this.projects.indexOf(project);
+    this.changingProjectDescription = true;
+    this.changeDetector.detectChanges();
+    this.changingProjectDescriptionInput.nativeElement.focus();
+  }
+
+  abortChangingProjectDescription() {
+    this.changingProjectDescriptionIndex = -1;
+    this.changingProjectDescription = false;
+  }
+
+  changeProjectDescription(event: any, projectIndex: number) {
+    const description = event.target.value as string;
+
+    if (description && this.changingProjectDescription) {
+      const previousDescription = this.projects[projectIndex].project.description;
+      this.projects[projectIndex].project.description = description;
+
+      this.projectService.changeProjectDescription(projectIndex, previousDescription).subscribe({
+        error: () => {
+          this.projects[projectIndex].project.description = previousDescription;
+          ErrorHandler.showPopupAlert("Can't change description the project.", this.modalService)
+        }
+      });
+    }
+
+    this.abortChangingProjectDescription();
   }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
 import {catchError, map} from "rxjs/operators";
@@ -37,8 +37,28 @@ export class ProjectService {
     )
   }
 
-  deleteProject(projectId: number): Observable<any> {
-    return this.http.delete(this.url + "/delete/" + projectId).pipe(
+  deleteProject(projectId: number): Observable<void> {
+    return this.http.delete<void>(this.url + "/delete/" + projectId).pipe(
+      catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeProjectName(projectId: number, projectName: string): Observable<void> {
+    const url = this.url + "/" + projectId + "/name";
+    let params = new HttpParams();
+    params = params.append("projectName", projectName);
+
+    return this.http.patch<void>(url, params).pipe(
+      catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeProjectDescription(projectId: number, projectDescription: string): Observable<void> {
+    const url = this.url + "/" + projectId + "/description";
+    let params = new HttpParams();
+    params = params.append("projectDescription", projectDescription);
+
+    return this.http.patch<void>(url, params).pipe(
       catchError(this.errorHandler.handle)
     );
   }
