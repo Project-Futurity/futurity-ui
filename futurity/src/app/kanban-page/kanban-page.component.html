@@ -3,6 +3,7 @@
        [cdkDropListData]="columns" (cdkDropListDropped)="dropColumn($event)"
        class="container-fluid d-flex align-items-start body-padding"
        [cdkDropListAutoScrollStep]="10" cdkScrollable #container dragScroll [drag-scroll-disable]="['column']">
+    <div class="spinner-border mx-auto" role="status" *ngIf="!columnsAreLoaded"></div>
     <div class="column text-center p-3" *ngFor="let column of columns; let i = index" cdkDrag cdkScrollable
          [contextMenu]="basicMenu" [contextMenuSubject]="column"
     >
@@ -48,7 +49,7 @@
              #input_column>
     </div>
     <div class="column text-center p-3 column-add" (click)="startCreateColumn()"
-         *ngIf="!creationNewColumn">
+         *ngIf="!creationNewColumn && columnsAreLoaded">
       <h2 class="mt-1 mb-1">+</h2>
     </div>
   </div>

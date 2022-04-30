@@ -33,6 +33,7 @@ export class KanbanPageComponent implements OnInit {
   @ViewChild("input_column") creationColumnInput: ElementRef;
 
   columns: ProjectColumn[] = [];
+  columnsAreLoaded = false;
 
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
               private columnService: ColumnService, private taskService: TaskService, private modalService: NgbModal) {
@@ -42,7 +43,10 @@ export class KanbanPageComponent implements OnInit {
     this.projectId = this.route.snapshot.paramMap.get("id") as unknown as number;
 
     this.columnService.getColumns(this.projectId).subscribe({
-      next: columns => this.columns = columns,
+      next: columns => {
+        this.columns = columns;
+        this.columnsAreLoaded = true;
+      },
       error: () => ErrorHandler.showPopupAlert("Can't load the columns.", this.modalService)
     });
   }
