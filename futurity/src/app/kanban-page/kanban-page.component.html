@@ -7,7 +7,10 @@
     <div class="column text-center p-3" *ngFor="let column of columns; let i = index" cdkDrag cdkScrollable
          [contextMenu]="basicMenu" [contextMenuSubject]="column"
     >
-      <h4 class="mt-2 mb-2" (click)="startChangeColumnName(i)" *ngIf="changingColumnIndex !== i">
+      <h4 class="mt-2 mb-2 text-nowrap overflow-hidden text-truncate cursor-pointer"
+          (click)="startChangeColumnName(i)" *ngIf="changingColumnIndex !== i"
+          [ngClass]="{'px-3': column.name.length > COLUMN_NAME_LENHGT}"
+          [ngbTooltip]="column.name.length > COLUMN_NAME_LENHGT ? column.name : null">
         {{column.name}}
       </h4>
       <input type="text" class="mt-2 mb-2 box-input" [value]="column.name" *ngIf="changingColumnIndex === i"
@@ -20,8 +23,14 @@
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
         <div class="box" *ngFor="let task of column.tasks; let ti = index;" cdkDrag [contextMenu]="basicMenu"
              [contextMenuSubject]="task">
-          <div *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
-               (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})">{{task.name}}</div>
+          <div class="text-nowrap overflow-hidden text-truncate cursor-pointer"
+               *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
+               (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})"
+               [ngClass]="{'px-3': task.name.length > TASK_NAME_LENHGT}"
+               [ngbTooltip]="task.name.length > TASK_NAME_LENHGT ? task.name : null"
+          >
+            {{task.name}}
+          </div>
           <input type="text" class="box-input" [value]="task.name" *ngIf="i === changingTaskIndex.columnIndex
            && ti === changingTaskIndex.taskIndex"
                  (blur)="changeTaskName($event, i, ti)"

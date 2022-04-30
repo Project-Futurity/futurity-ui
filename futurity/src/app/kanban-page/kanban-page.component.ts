@@ -35,6 +35,9 @@ export class KanbanPageComponent implements OnInit {
   columns: ProjectColumn[] = [];
   columnsAreLoaded = false;
 
+  readonly COLUMN_NAME_LENHGT = 22;
+  readonly TASK_NAME_LENHGT = 28;
+
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
               private columnService: ColumnService, private taskService: TaskService, private modalService: NgbModal) {
   }

@@ -24,6 +24,7 @@
   color: #dadada;
   font-size: 24px;
   box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.164);
+  cursor: move;
 }
 
 .column:last-child {
