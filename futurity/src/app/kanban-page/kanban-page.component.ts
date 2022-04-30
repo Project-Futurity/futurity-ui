@@ -4,7 +4,7 @@ import {ContextMenuComponent} from "ngx-contextmenu";
 import {ActivatedRoute} from "@angular/router";
 import {ColumnService} from "../shared/services/column.service";
 import {TaskService} from "../shared/services/task.service";
-import {ProjectColumn, Task} from "../shared/interfaces/project-ui";
+import {ProjectColumn, Task, TaskChangingIndex} from "../shared/interfaces/project-ui";
 import {ErrorHandler} from "../shared/services/error-handler";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -17,11 +17,19 @@ export class KanbanPageComponent implements OnInit {
   projectId: number;
 
   creationNewTask = false;
-  creationColumnIndex: number = -1;
+  creationColumnIndex = -1;
+  changingColumnIndex = -1;
+  changingTask = false;
+
+  private readonly NOT_EXISTING_TASK_INDEX: TaskChangingIndex = {taskIndex: -1, columnIndex: -1};
+  changingTaskIndex: TaskChangingIndex = this.NOT_EXISTING_TASK_INDEX;
+  @ViewChild("input_task_change") changingTaskInput: ElementRef;
   @ViewChild("input_box") creationTaskInput: ElementRef;
   @ViewChild(ContextMenuComponent, {static: true}) basicMenu: ContextMenuComponent;
 
   creationNewColumn = false;
+  changingColumn = false;
+  @ViewChild("input_column_change") changingColumnInput: ElementRef;
   @ViewChild("input_column") creationColumnInput: ElementRef;
 
   columns: ProjectColumn[] = [];
@@ -48,9 +56,7 @@ export class KanbanPageComponent implements OnInit {
 
       if (event.previousIndex != event.currentIndex) {
         this.columnService.changeColumnIndex({
-          from: event.previousIndex,
-          to: event.currentIndex,
-          projectId: this.projectId
+          from: event.previousIndex, to: event.currentIndex, projectId: this.projectId
         }).subscribe({
           error: () => {
             ErrorHandler.showPopupAlert("Can't move the column.", this.modalService);
@@ -72,10 +78,8 @@ export class KanbanPageComponent implements OnInit {
 
       if (event.previousIndex != event.currentIndex) {
         this.taskService.changeTaskIndex(this.projectId, {
-          fromColumn: columnTo,
-          toColumn: columnTo,
-          from: event.previousIndex,
-          to: event.currentIndex
+          fromColumn: columnTo, toColumn: columnTo,
+          from: event.previousIndex, to: event.currentIndex
         }).subscribe({
           error: () => {
             ErrorHandler.showPopupAlert("Can't move the task.", this.modalService);
@@ -115,8 +119,7 @@ export class KanbanPageComponent implements OnInit {
             const taskToAdd: Task = {name: task, columnIndex: columnIndex};
             const index = column.tasks.push(taskToAdd) - 1;
             const request = {
-              projectId: this.projectId, taskName: task,
-              columnIndex: columnIndex
+              projectId: this.projectId, taskName: task, columnIndex: columnIndex
             };
 
             this.taskService.createTask(request).subscribe({
@@ -178,8 +181,7 @@ export class KanbanPageComponent implements OnInit {
       this.columns[value.columnIndex].tasks.splice(index, 1);
 
       this.taskService.deleteTask({
-        taskIndex: index, projectId: this.projectId,
-        columnIndex: value.columnIndex
+        taskIndex: index, projectId: this.projectId, columnIndex: value.columnIndex
       }).subscribe({
         error: () => {
           ErrorHandler.showPopupAlert("Can't delete the task.", this.modalService);
@@ -200,5 +202,69 @@ export class KanbanPageComponent implements OnInit {
     this.creationNewColumn = true;
     this.changeDetector.detectChanges();
     this.creationColumnInput.nativeElement.focus();
+  }
+
+  startChangeColumnName(index: number) {
+    this.changingColumn = true;
+    this.changingColumnIndex = index;
+    this.changeDetector.detectChanges();
+    this.changingColumnInput.nativeElement.focus();
+  }
+
+  abortColumnChanging() {
+    this.changingColumn = false;
+    this.changingColumnIndex = -1;
+  }
+
+  changeColumnName(event: any, columnIndex: number) {
+    const name = event.target.value as string;
+
+    if (name && this.changingColumn) {
+      const previousName = this.columns[columnIndex].name;
+      this.columns[columnIndex].name = name;
+
+      this.columnService.changeColumnName({
+        columnName: name, columnIndex: columnIndex, projectId: this.projectId
+      }).subscribe({
+        error: () => {
+          this.columns[columnIndex].name = previousName;
+          ErrorHandler.showPopupAlert("Can't rename the column.", this.modalService);
+        }
+      })
+    }
+
+    this.abortColumnChanging();
+  }
+
+  startChangeTaskName(taskIndex: TaskChangingIndex) {
+    this.changingTask = true;
+    this.changingTaskIndex = taskIndex;
+    this.changeDetector.detectChanges();
+    this.changingTaskInput.nativeElement.focus();
+  }
+
+  abortTaskChanging() {
+    this.changingTask = false;
+    this.changingTaskIndex = this.NOT_EXISTING_TASK_INDEX;
+  }
+
+  changeTaskName(event: any, columnIndex: number, taskIndex: number) {
+    const name = event.target.value as string;
+
+    if (name && this.changingTask) {
+      const previousName = this.columns[columnIndex].tasks[taskIndex].name;
+      this.columns[columnIndex].tasks[taskIndex].name = name;
+
+      this.taskService.changeTaskName({
+        taskName: name, taskIndex: taskIndex, columnIndex: columnIndex, projectId: this.projectId
+      }).subscribe({
+        error: () => {
+          this.columns[columnIndex].tasks[taskIndex].name = previousName;
+          ErrorHandler.showPopupAlert("Can't rename the task.", this.modalService);
+        }
+      })
+    }
+
+    this.abortTaskChanging();
   }
 }

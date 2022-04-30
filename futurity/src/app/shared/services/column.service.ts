@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {
-  ChangeColumnIndexDto,
+  ChangeColumnIndexDto, ChangeColumnNameDto,
   CreationColumnDto, DeletingColumnDto,
 } from "../dto/project-dto";
 import {Observable} from "rxjs";
@@ -13,12 +13,12 @@ import {ProjectColumn} from "../interfaces/project-ui";
   providedIn: 'root'
 })
 export class ColumnService {
-  private readonly url = "/project/column";
+  private readonly url = "/project/column/";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 
   getColumns(projectId: number): Observable<ProjectColumn[]> {
-    const url = this.url + "/" + projectId + "/";
+    const url = this.url + projectId + "/";
 
     return this.http.get<ProjectColumn[]>(url).pipe(
       catchError(this.errorHandler.handle),
@@ -26,7 +26,7 @@ export class ColumnService {
   }
 
   createColumn(request: CreationColumnDto): Observable<number> {
-    const url = this.url + "/" + request.projectId + "/create";
+    const url = this.url + request.projectId + "/create";
     let params = new HttpParams();
     params = params.append('columnName', request.name);
 
@@ -36,7 +36,7 @@ export class ColumnService {
   }
 
   deleteColumn(request: DeletingColumnDto): Observable<void> {
-    const url = this.url + "/" + request.projectId + "/delete/" + request.index;
+    const url = this.url + request.projectId + "/delete/" + request.index;
 
     return this.http.delete<void>(url).pipe(
       catchError(this.errorHandler.handle)
@@ -44,10 +44,20 @@ export class ColumnService {
   }
 
   changeColumnIndex(request: ChangeColumnIndexDto): Observable<void> {
-    const url = this.url + "/" + request.projectId + "/index/change";
+    const url = this.url + request.projectId + "/index/change";
     let params = new HttpParams();
-    params = params.append('from', request.from);
-    params = params.append('to', request.to);
+    params = params.append("from", request.from);
+    params = params.append("to", request.to);
+
+    return this.http.patch<void>(url, params).pipe(
+      catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeColumnName(request: ChangeColumnNameDto): Observable<void> {
+    const url = this.url + request.projectId + "/" + request.columnIndex + "/name";
+    let params = new HttpParams();
+    params = params.append("columnName", request.columnName);
 
     return this.http.patch<void>(url, params).pipe(
       catchError(this.errorHandler.handle)

@@ -6,12 +6,28 @@
     <div class="column text-center p-3" *ngFor="let column of columns; let i = index" cdkDrag cdkScrollable
          [contextMenu]="basicMenu" [contextMenuSubject]="column"
     >
-      <h4 class="mt-2 mb-2">{{column.name}}</h4>
+      <h4 class="mt-2 mb-2" (click)="startChangeColumnName(i)" *ngIf="changingColumnIndex !== i">
+        {{column.name}}
+      </h4>
+      <input type="text" class="mt-2 mb-2 box-input" [value]="column.name" *ngIf="changingColumnIndex === i"
+             (blur)="changeColumnName($event, i)"
+             (keyup.enter)="changeColumnName($event, i)"
+             (keyup.escape)="abortColumnChanging()"
+             #input_column_change>
       <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event, i)"
            cdkScrollable [cdkDropListAutoScrollStep]="10"
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
-        <div class="box" *ngFor="let task of column.tasks" cdkDrag [contextMenu]="basicMenu"
-             [contextMenuSubject]="task">{{task.name}}</div>
+        <div class="box" *ngFor="let task of column.tasks; let ti = index;" cdkDrag [contextMenu]="basicMenu"
+             [contextMenuSubject]="task">
+          <div *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
+               (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})">{{task.name}}</div>
+          <input type="text" class="box-input" [value]="task.name" *ngIf="i === changingTaskIndex.columnIndex
+           && ti === changingTaskIndex.taskIndex"
+                 (blur)="changeTaskName($event, i, ti)"
+                 (keyup.enter)="changeTaskName($event, i, ti)"
+                 (keyup.escape)="abortTaskChanging()"
+                 #input_task_change>
+        </div>
       </div>
       <div class="box" *ngIf="creationNewTask && i === creationColumnIndex">
         <input class="box-input" type="text"
@@ -25,10 +41,11 @@
       </div>
     </div>
     <div class="column text-center p-3" *ngIf="creationNewColumn">
-        <input type="text" class="mt-2 mb-2 box-input"
-               (blur)="creationColumnUnFocus($event)"
-               (keyup.enter)="creationColumnUnFocus($event)"
-               (keyup.escape)="abortColumnCreation()" #input_column>
+      <input type="text" class="mt-2 mb-2 box-input"
+             (blur)="creationColumnUnFocus($event)"
+             (keyup.enter)="creationColumnUnFocus($event)"
+             (keyup.escape)="abortColumnCreation()"
+             #input_column>
     </div>
     <div class="column text-center p-3 column-add" (click)="startCreateColumn()"
          *ngIf="!creationNewColumn">

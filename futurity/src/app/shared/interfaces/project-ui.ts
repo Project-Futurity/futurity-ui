@@ -3,6 +3,11 @@ export interface ProjectUi {
   isPreviewLoad: boolean;
 }
 
+export interface TaskChangingIndex {
+  columnIndex: number,
+  taskIndex: number
+}
+
 export interface Project {
   id: number;
   name: string;

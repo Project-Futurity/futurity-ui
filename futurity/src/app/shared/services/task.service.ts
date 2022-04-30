@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
-import {ChangeTaskIndexDto, CreationTaskDto, DeletingTaskDto} from "../dto/project-dto";
+import {ChangeTaskIndexDto, ChangeTaskNameDto, CreationTaskDto, DeletingTaskDto} from "../dto/project-dto";
 import {catchError} from "rxjs/operators";
 
 @Injectable({
@@ -36,6 +36,16 @@ export class TaskService {
 
     return this.http.patch<void>(url, request).pipe(
       catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeTaskName(request: ChangeTaskNameDto): Observable<void> {
+    const url = this.url + request.projectId + "/" + request.columnIndex + "/" + request.taskIndex + "/name";
+    let params = new HttpParams();
+    params = params.append("taskName", request.taskName);
+
+    return this.http.patch<void>(url, params).pipe(
+        catchError(this.errorHandler.handle)
     );
   }
 }

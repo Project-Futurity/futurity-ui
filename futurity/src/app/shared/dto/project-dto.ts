@@ -37,3 +37,16 @@ export interface ChangeTaskIndexDto {
   from: number;
   to: number;
 }
+
+export interface ChangeColumnNameDto {
+  projectId: number;
+  columnIndex: number;
+  columnName: string;
+}
+
+export interface ChangeTaskNameDto {
+  projectId: number;
+  columnIndex: number;
+  taskIndex: number;
+  taskName: string;
+}
