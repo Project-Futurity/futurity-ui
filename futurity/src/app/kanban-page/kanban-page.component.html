@@ -31,7 +31,7 @@
           >
             {{task.name}}
           </div>
-          <input type="text" class="box-input" [value]="task.name" *ngIf="i === changingTaskIndex.columnIndex
+          <input type="text" class="box-input p-0" [value]="task.name" *ngIf="i === changingTaskIndex.columnIndex
            && ti === changingTaskIndex.taskIndex"
                  (blur)="changeTaskName($event, i, ti)"
                  (keyup.enter)="changeTaskName($event, i, ti)"

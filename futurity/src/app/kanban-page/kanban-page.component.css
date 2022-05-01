@@ -75,6 +75,8 @@
   outline: none;
   font-size: 18px;
   color: #dadada;
+  text-align: center;
+  width: 100%;
 }
 
 .cdk-drag-preview {

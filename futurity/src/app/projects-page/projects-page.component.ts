@@ -92,14 +92,17 @@ export class ProjectsPageComponent implements OnInit {
 
     if (name && this.changingProjectName) {
       const previousName = this.projects[projectIndex].project.name;
-      this.projects[projectIndex].project.name = name;
 
-      this.projectService.changeProjectName(projectIndex, name).subscribe({
-        error: () => {
-          this.projects[projectIndex].project.name = previousName;
-          ErrorHandler.showPopupAlert("Can't rename the project.", this.modalService)
-        }
-      });
+      if (name != previousName) {
+        this.projects[projectIndex].project.name = name;
+
+        this.projectService.changeProjectName(projectIndex, name).subscribe({
+          error: () => {
+            this.projects[projectIndex].project.name = previousName;
+            ErrorHandler.showPopupAlert("Can't rename the project.", this.modalService)
+          }
+        });
+      }
     }
 
     this.abortChangingProjectName();
@@ -122,14 +125,17 @@ export class ProjectsPageComponent implements OnInit {
 
     if (description && this.changingProjectDescription) {
       const previousDescription = this.projects[projectIndex].project.description;
-      this.projects[projectIndex].project.description = description;
 
-      this.projectService.changeProjectDescription(projectIndex, previousDescription).subscribe({
-        error: () => {
-          this.projects[projectIndex].project.description = previousDescription;
-          ErrorHandler.showPopupAlert("Can't change description the project.", this.modalService)
-        }
-      });
+      if (description != previousDescription) {
+        this.projects[projectIndex].project.description = description;
+
+        this.projectService.changeProjectDescription(projectIndex, previousDescription).subscribe({
+          error: () => {
+            this.projects[projectIndex].project.description = previousDescription;
+            ErrorHandler.showPopupAlert("Can't change description the project.", this.modalService)
+          }
+        });
+      }
     }
 
     this.abortChangingProjectDescription();

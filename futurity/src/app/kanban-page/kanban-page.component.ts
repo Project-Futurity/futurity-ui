@@ -178,8 +178,8 @@ export class KanbanPageComponent implements OnInit {
 
       this.columnService.deleteColumn({index: index, projectId: this.projectId}).subscribe({
         error: () => {
-          ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
           this.columns.splice(index, 0, value);
+          ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
         }
       });
     } else {
@@ -228,16 +228,19 @@ export class KanbanPageComponent implements OnInit {
 
     if (name && this.changingColumn) {
       const previousName = this.columns[columnIndex].name;
-      this.columns[columnIndex].name = name;
 
-      this.columnService.changeColumnName({
-        columnName: name, columnIndex: columnIndex, projectId: this.projectId
-      }).subscribe({
-        error: () => {
-          this.columns[columnIndex].name = previousName;
-          ErrorHandler.showPopupAlert("Can't rename the column.", this.modalService);
-        }
-      })
+      if (name != previousName) {
+        this.columns[columnIndex].name = name;
+
+        this.columnService.changeColumnName({
+          columnName: name, columnIndex: columnIndex, projectId: this.projectId
+        }).subscribe({
+          error: () => {
+            this.columns[columnIndex].name = previousName;
+            ErrorHandler.showPopupAlert("Can't rename the column.", this.modalService);
+          }
+        });
+      }
     }
 
     this.abortColumnChanging();
@@ -260,16 +263,19 @@ export class KanbanPageComponent implements OnInit {
 
     if (name && this.changingTask) {
       const previousName = this.columns[columnIndex].tasks[taskIndex].name;
-      this.columns[columnIndex].tasks[taskIndex].name = name;
 
-      this.taskService.changeTaskName({
-        taskName: name, taskIndex: taskIndex, columnIndex: columnIndex, projectId: this.projectId
-      }).subscribe({
-        error: () => {
-          this.columns[columnIndex].tasks[taskIndex].name = previousName;
-          ErrorHandler.showPopupAlert("Can't rename the task.", this.modalService);
-        }
-      })
+      if (name != previousName) {
+        this.columns[columnIndex].tasks[taskIndex].name = name;
+
+        this.taskService.changeTaskName({
+          taskName: name, taskIndex: taskIndex, columnIndex: columnIndex, projectId: this.projectId
+        }).subscribe({
+          error: () => {
+            this.columns[columnIndex].tasks[taskIndex].name = previousName;
+            ErrorHandler.showPopupAlert("Can't rename the task.", this.modalService);
+          }
+        });
+      }
     }
 
     this.abortTaskChanging();
