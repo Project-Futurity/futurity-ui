@@ -96,7 +96,7 @@ export class ProjectsPageComponent implements OnInit {
       if (name != previousName) {
         this.projects[projectIndex].project.name = name;
 
-        this.projectService.changeProjectName(projectIndex, name).subscribe({
+        this.projectService.changeProjectName(this.projects[projectIndex].project.id, name).subscribe({
           error: () => {
             this.projects[projectIndex].project.name = previousName;
             ErrorHandler.showPopupAlert("Can't rename the project.", this.modalService)
@@ -129,7 +129,7 @@ export class ProjectsPageComponent implements OnInit {
       if (description != previousDescription) {
         this.projects[projectIndex].project.description = description;
 
-        this.projectService.changeProjectDescription(projectIndex, previousDescription).subscribe({
+        this.projectService.changeProjectDescription(this.projects[projectIndex].project.id, previousDescription).subscribe({
           error: () => {
             this.projects[projectIndex].project.description = previousDescription;
             ErrorHandler.showPopupAlert("Can't change description the project.", this.modalService)

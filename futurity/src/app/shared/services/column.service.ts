@@ -27,10 +27,8 @@ export class ColumnService {
 
   createColumn(request: CreationColumnDto): Observable<number> {
     const url = this.url + request.projectId + "/create";
-    let params = new HttpParams();
-    params = params.append('columnName', request.name);
 
-    return this.http.post<number>(url, params).pipe(
+    return this.http.post<number>(url, {value: request.name}).pipe(
       catchError(this.errorHandler.handle)
     );
   }
@@ -56,10 +54,8 @@ export class ColumnService {
 
   changeColumnName(request: ChangeColumnNameDto): Observable<void> {
     const url = this.url + request.projectId + "/" + request.columnIndex + "/name";
-    let params = new HttpParams();
-    params = params.append("columnName", request.columnName);
 
-    return this.http.patch<void>(url, params).pipe(
+    return this.http.patch<void>(url, {value: request.columnName}).pipe(
       catchError(this.errorHandler.handle)
     );
   }

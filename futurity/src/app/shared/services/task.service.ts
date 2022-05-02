@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
 import {ChangeTaskIndexDto, ChangeTaskNameDto, CreationTaskDto, DeletingTaskDto} from "../dto/project-dto";
@@ -15,10 +15,8 @@ export class TaskService {
 
   createTask(request: CreationTaskDto): Observable<number> {
     const url = this.url + request.projectId + "/" + request.columnIndex + "/create";
-    let params = new HttpParams();
-    params = params.append("taskName", request.taskName);
 
-    return this.http.post<number>(url, params).pipe(
+    return this.http.post<number>(url, {value: request.taskName}).pipe(
       catchError(this.errorHandler.handle)
     );
   }
@@ -41,10 +39,8 @@ export class TaskService {
 
   changeTaskName(request: ChangeTaskNameDto): Observable<void> {
     const url = this.url + request.projectId + "/" + request.columnIndex + "/" + request.taskIndex + "/name";
-    let params = new HttpParams();
-    params = params.append("taskName", request.taskName);
 
-    return this.http.patch<void>(url, params).pipe(
+    return this.http.patch<void>(url, {value: request.taskName}).pipe(
         catchError(this.errorHandler.handle)
     );
   }
