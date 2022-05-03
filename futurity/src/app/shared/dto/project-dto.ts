@@ -23,6 +23,7 @@ export interface CreationTaskDto {
   projectId: number;
   columnIndex: number;
   taskName: string;
+  deadline: string;
 }
 
 export interface DeletingTaskDto {

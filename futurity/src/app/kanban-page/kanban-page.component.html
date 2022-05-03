@@ -21,8 +21,8 @@
       <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event, i)"
            cdkScrollable [cdkDropListAutoScrollStep]="10"
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
-        <div class="box" *ngFor="let task of column.tasks; let ti = index;" cdkDrag [contextMenu]="basicMenu"
-             [contextMenuSubject]="task">
+        <div class="box d-flex flex-column" *ngFor="let task of column.tasks; let ti = index;" cdkDrag [contextMenu]="basicMenu"
+             [contextMenuSubject]="task" [ngStyle]="{'border': true ? '3px solid rgb(248, 118, 118)' : 'rgb(94, 93, 93)'}">
           <div class="text-nowrap overflow-hidden text-truncate cursor-pointer"
                *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
                (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})"
@@ -37,6 +37,11 @@
                  (keyup.enter)="changeTaskName($event, i, ti)"
                  (keyup.escape)="abortTaskChanging()"
                  #input_task_change>
+          <div class="deadline-text w-100 cursor-pointer" *ngIf="task.deadline != null"
+               [ngbTooltip]="diffDeadline(task.deadline)"
+          >
+            {{showDeadline(task.deadline)}}
+          </div>
         </div>
       </div>
       <div class="box" *ngIf="creationNewTask && i === creationColumnIndex">

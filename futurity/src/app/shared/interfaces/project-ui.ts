@@ -23,4 +23,5 @@ export interface ProjectColumn {
 export interface Task {
   name: string;
   columnIndex: number;
+  deadline: string;
 }

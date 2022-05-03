@@ -3,6 +3,7 @@
 @import "app/shared/styles/checkbox.css";
 @import "app/shared/styles/auth-card.css";
 @import "app/shared/styles/file-uploader.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 
 body {
   background: #282c35;

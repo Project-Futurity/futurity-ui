@@ -4,9 +4,11 @@ import {ContextMenuComponent} from "ngx-contextmenu";
 import {ActivatedRoute} from "@angular/router";
 import {ColumnService} from "../shared/services/column.service";
 import {TaskService} from "../shared/services/task.service";
-import {ProjectColumn, Task, TaskChangingIndex} from "../shared/interfaces/project-ui";
+import {ProjectColumn, TaskChangingIndex, Task} from "../shared/interfaces/project-ui";
 import {ErrorHandler} from "../shared/services/error-handler";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ConfigureTaskFormComponent} from "../configure-task-form/configure-task-form.component";
+import * as moment from "moment/moment";
 
 @Component({
   selector: 'app-kanban-page',
@@ -52,6 +54,7 @@ export class KanbanPageComponent implements OnInit {
       },
       error: () => ErrorHandler.showPopupAlert("Can't load the columns.", this.modalService)
     });
+    this.columnsAreLoaded = true;
   }
 
   dropColumn(event: CdkDragDrop<any[]>) {
@@ -119,25 +122,32 @@ export class KanbanPageComponent implements OnInit {
     const task = event.target.value as string;
 
     if (task && this.creationNewTask) {
-      this.columns.forEach((column, index) => {
-        if (index === this.creationColumnIndex) {
-          if (task != '+') {
-            const columnIndex = this.columns.indexOf(column);
-            const taskToAdd: Task = {name: task, columnIndex: columnIndex};
-            const index = column.tasks.push(taskToAdd) - 1;
-            const request = {
-              projectId: this.projectId, taskName: task, columnIndex: columnIndex
-            };
+      if (task != '+') {
+        const column = this.columns[this.creationColumnIndex];
+        const columnIndex = this.columns.indexOf(column);
+        const taskToAdd: Task = {name: task, columnIndex: columnIndex, deadline: null};
+        const index = column.tasks.push(taskToAdd) - 1;
 
-            this.taskService.createTask(request).subscribe({
-              error: () => {
-                ErrorHandler.showPopupAlert("Can't create the task.", this.modalService);
-                this.columns.splice(index, 1);
-              }
-            })
-          }
-        }
-      });
+        const modal = this.modalService.open(ConfigureTaskFormComponent, {
+          centered: true, animation: true, scrollable: false
+        });
+
+        modal.result.then(data => {
+          const request = {
+            projectId: this.projectId, taskName: task, columnIndex: columnIndex, deadline: data
+          };
+          taskToAdd.deadline = data;
+
+          this.taskService.createTask(request).subscribe({
+            error: () => {
+              ErrorHandler.showPopupAlert("Can't create the task.", this.modalService);
+              column.tasks.splice(index, 1);
+            }
+          });
+        }, () => {
+          column.tasks.splice(index, 1);
+        });
+      }
     }
 
     this.abortTaskCreation();
@@ -160,7 +170,7 @@ export class KanbanPageComponent implements OnInit {
           ErrorHandler.showPopupAlert("Can't create the column.", this.modalService);
           this.columns.splice(index, 1);
         }
-      })
+      });
     }
 
     this.abortColumnCreation()
@@ -279,5 +289,37 @@ export class KanbanPageComponent implements OnInit {
     }
 
     this.abortTaskChanging();
+  }
+
+  showDeadline(deadline: string) {
+    const time = moment(deadline);
+    let append = "";
+
+    if (this.isDeadlineViolated(deadline)) {
+      append = " deadline violated!";
+    }
+
+    return time.format("DD.MM.YY, HH:mm") + append;
+  }
+
+  diffDeadline(deadline: string) {
+    const time = moment(deadline);
+    const now = moment();
+    const days = time.diff(now, "days");
+
+    if (days == 0) {
+      return "Deadline today!";
+    } else if (days < 0) {
+      return "Deadline is violated"
+    } else {
+      return "Left " + days + " days to deadline";
+    }
+  }
+
+  isDeadlineViolated(deadline: string) {
+    const time = moment(deadline);
+    const current = moment();
+
+    return current.isAfter(time);
   }
 }

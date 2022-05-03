@@ -26,6 +26,10 @@ import {AlertPopupComponent} from './alert-popup/alert-popup.component';
 import {KanbanPageComponent} from './kanban-page/kanban-page.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
+import { ConfigureTaskFormComponent } from './configure-task-form/configure-task-form.component';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from "ng-pick-datetime";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NgxBootstrapIconsModule, power} from "ngx-bootstrap-icons";
 
 @NgModule({
   declarations: [
@@ -42,7 +46,8 @@ import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
     CreationProjectFormComponent,
     AlertPopupComponent,
     KanbanPageComponent,
-    DragScrollDirective
+    DragScrollDirective,
+    ConfigureTaskFormComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +65,10 @@ import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
       },
     }),
     DragDropModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    BrowserAnimationsModule,
+    NgxBootstrapIconsModule.pick({power})
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true},

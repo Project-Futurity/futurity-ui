@@ -6,7 +6,6 @@ import {LoginPageComponent} from "../login-page/login-page.component";
 import {RegistrationPageComponent} from "../registration-page/registration-page.component";
 import {LoginedLayoutComponent} from "../shared/layouts/logined-layout/logined-layout.component";
 import {ProjectsPageComponent} from "../projects-page/projects-page.component";
-import {LoginGuard} from "../shared/guards/login.guard";
 import {NotLoginedGuard} from "../shared/guards/not-logined.guard";
 import {KanbanPageComponent} from "../kanban-page/kanban-page.component";
 
