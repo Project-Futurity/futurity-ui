@@ -27,9 +27,11 @@ import {KanbanPageComponent} from './kanban-page/kanban-page.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
 import { ConfigureTaskFormComponent } from './configure-task-form/configure-task-form.component';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from "ng-pick-datetime";
+import {OWL_DATE_TIME_FORMATS, OwlDateTimeModule} from "ng-pick-datetime";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgxBootstrapIconsModule, power} from "ngx-bootstrap-icons";
+import {MOMENT_FORMAT} from "./shared/interfaces/time";
+import {OwlMomentDateTimeModule} from "ng-pick-datetime-moment-ng9";
 
 @NgModule({
   declarations: [
@@ -66,13 +68,14 @@ import {NgxBootstrapIconsModule, power} from "ngx-bootstrap-icons";
     }),
     DragDropModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule,
+    OwlMomentDateTimeModule,
     BrowserAnimationsModule,
     NgxBootstrapIconsModule.pick({power})
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true},
-    {provide: ContextMenuService, useExisting: ContextMenuFixService}
+    {provide: ContextMenuService, useExisting: ContextMenuFixService},
+    {provide: OWL_DATE_TIME_FORMATS, useValue: MOMENT_FORMAT}
   ],
   bootstrap: [AppComponent]
 })

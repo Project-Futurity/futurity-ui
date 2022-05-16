@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {Observable} from "rxjs";
-import {ChangeTaskIndexDto, ChangeTaskNameDto, CreationTaskDto, DeletingTaskDto} from "../dto/project-dto";
+import {
+  ChangeTaskDeadlineDto,
+  ChangeTaskIndexDto,
+  ChangeTaskNameDto,
+  CreationTaskDto,
+  DeletingTaskDto
+} from "../dto/project-dto";
 import {catchError} from "rxjs/operators";
 
 @Injectable({
@@ -14,15 +20,16 @@ export class TaskService {
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 
   createTask(request: CreationTaskDto): Observable<number> {
-    const url = this.url + request.projectId + "/" + request.columnIndex + "/create";
+    const url = this.url + request.projectId + "/" + request.columnId + "/create";
 
-    return this.http.post<number>(url, {value: request.taskName}).pipe(
+    return this.http.post<number>(url, {name: request.taskName, deadline: request.deadline}).pipe(
       catchError(this.errorHandler.handle)
     );
   }
 
   deleteTask(request: DeletingTaskDto): Observable<void> {
-    const url = this.url + request.projectId + "/" + request.columnIndex + "/" + request.taskIndex + "/delete";
+    const url = this.url + request.projectId + "/" + request.columnId + "/" + request.taskId + "/delete";
+    console.log(request)
 
     return this.http.delete<void>(url).pipe(
       catchError(this.errorHandler.handle)
@@ -38,10 +45,18 @@ export class TaskService {
   }
 
   changeTaskName(request: ChangeTaskNameDto): Observable<void> {
-    const url = this.url + request.projectId + "/" + request.columnIndex + "/" + request.taskIndex + "/name";
+    const url = this.url + request.projectId + "/" + request.columnId + "/" + request.taskId + "/name";
 
     return this.http.patch<void>(url, {value: request.taskName}).pipe(
         catchError(this.errorHandler.handle)
+    );
+  }
+
+  changeTaskDeadline(request: ChangeTaskDeadlineDto): Observable<void> {
+    const url = this.url + request.projectId + "/" + request.columnId + "/" + request.taskId + "/deadline";
+
+    return this.http.patch<void>(url, {value: request.deadline}).pipe(
+      catchError(this.errorHandler.handle)
     );
   }
 }

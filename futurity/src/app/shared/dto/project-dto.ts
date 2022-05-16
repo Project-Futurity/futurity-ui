@@ -9,7 +9,7 @@ export interface CreationColumnDto {
 }
 
 export interface DeletingColumnDto {
-  index: number;
+  columnId: number;
   projectId: number;
 }
 
@@ -21,15 +21,15 @@ export interface ChangeColumnIndexDto {
 
 export interface CreationTaskDto {
   projectId: number;
-  columnIndex: number;
+  columnId: number;
   taskName: string;
   deadline: string;
 }
 
 export interface DeletingTaskDto {
   projectId: number;
-  columnIndex: number;
-  taskIndex: number;
+  columnId: number;
+  taskId: number;
 }
 
 export interface ChangeTaskIndexDto {
@@ -41,13 +41,20 @@ export interface ChangeTaskIndexDto {
 
 export interface ChangeColumnNameDto {
   projectId: number;
-  columnIndex: number;
+  columnId: number;
   columnName: string;
 }
 
 export interface ChangeTaskNameDto {
   projectId: number;
-  columnIndex: number;
-  taskIndex: number;
+  columnId: number;
+  taskId: number;
   taskName: string;
+}
+
+export interface ChangeTaskDeadlineDto {
+  projectId: number;
+  columnId: number;
+  taskId: number;
+  deadline: string;
 }

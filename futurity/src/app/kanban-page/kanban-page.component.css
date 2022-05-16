@@ -130,6 +130,7 @@
   text-align: right;
   padding-right: 10px;
   padding-top: 10px;
+  margin-left: auto;
 }
 
 ::ng-deep .ngx-contextmenu .dropdown-menu {
@@ -145,4 +146,8 @@
 
 ::ng-deep .ngx-contextmenu a:hover {
   color: #282c35;
+}
+
+::ng-deep .ngx-contextmenu li {
+  margin-top: 3px;
 }

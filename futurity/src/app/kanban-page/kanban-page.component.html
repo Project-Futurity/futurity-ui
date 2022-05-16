@@ -14,15 +14,17 @@
         {{column.name}}
       </h4>
       <input type="text" class="mt-2 mb-2 box-input" [value]="column.name" *ngIf="changingColumnIndex === i"
-             (blur)="changeColumnName($event, i)"
-             (keyup.enter)="changeColumnName($event, i)"
+             (blur)="changeColumnName($event, column)"
+             (keyup.enter)="changeColumnName($event, column)"
              (keyup.escape)="abortColumnChanging()"
              #input_column_change>
       <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event, i)"
            cdkScrollable [cdkDropListAutoScrollStep]="10"
            [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
         <div class="box d-flex flex-column" *ngFor="let task of column.tasks; let ti = index;" cdkDrag [contextMenu]="basicMenu"
-             [contextMenuSubject]="task" [ngStyle]="{'border': true ? '3px solid rgb(248, 118, 118)' : 'rgb(94, 93, 93)'}">
+             [contextMenuSubject]="task" [ngStyle]="{
+              'border': this.isDeadlineViolated(task.deadline) ? '3px solid rgb(248, 118, 118)' : 'rgb(94, 93, 93)'
+             }">
           <div class="text-nowrap overflow-hidden text-truncate cursor-pointer"
                *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
                (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})"
@@ -37,7 +39,7 @@
                  (keyup.enter)="changeTaskName($event, i, ti)"
                  (keyup.escape)="abortTaskChanging()"
                  #input_task_change>
-          <div class="deadline-text w-100 cursor-pointer" *ngIf="task.deadline != null"
+          <div class="deadline-text cursor-pointer" *ngIf="task.deadline != null"
                [ngbTooltip]="diffDeadline(task.deadline)"
           >
             {{showDeadline(task.deadline)}}
@@ -70,4 +72,5 @@
 </div>
 <context-menu>
   <ng-template contextMenuItem let-item (execute)="delete($event.item)">Delete {{item.name}}</ng-template>
+  <ng-template contextMenuItem (execute)="changeTaskDeadline($event.item)">Change deadline</ng-template>
 </context-menu>

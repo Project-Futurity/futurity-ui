@@ -16,12 +16,14 @@ export interface Project {
 }
 
 export interface ProjectColumn {
+  id?: number,
   name: string;
   tasks: Task[];
 }
 
 export interface Task {
+  id?: number
   name: string;
-  columnIndex: number;
+  columnId: number;
   deadline: string;
 }

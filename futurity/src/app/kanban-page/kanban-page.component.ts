@@ -9,6 +9,8 @@ import {ErrorHandler} from "../shared/services/error-handler";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfigureTaskFormComponent} from "../configure-task-form/configure-task-form.component";
 import * as moment from "moment/moment";
+import {DATE_FORMAT} from "../shared/interfaces/time";
+import {ChangeTaskDeadlineDto} from "../shared/dto/project-dto";
 
 @Component({
   selector: 'app-kanban-page',
@@ -101,6 +103,7 @@ export class KanbanPageComponent implements OnInit {
       const previous = event.previousContainer.data;
       const columnFrom = this.columns.findIndex(column => column.tasks.length == previous.length
         && column.tasks.every((elem, index) => elem == previous[index]));
+      const task = this.columns[columnFrom].tasks[event.previousIndex];
 
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
 
@@ -110,6 +113,7 @@ export class KanbanPageComponent implements OnInit {
         from: event.previousIndex,
         to: event.currentIndex
       }).subscribe({
+        next: () => task.columnId = this.columns[columnTo].id,
         error: () => {
           ErrorHandler.showPopupAlert("Can't move the task.", this.modalService);
           transferArrayItem(event.container.data, event.previousContainer.data, event.currentIndex, event.previousIndex);
@@ -124,33 +128,60 @@ export class KanbanPageComponent implements OnInit {
     if (task && this.creationNewTask) {
       if (task != '+') {
         const column = this.columns[this.creationColumnIndex];
-        const columnIndex = this.columns.indexOf(column);
-        const taskToAdd: Task = {name: task, columnIndex: columnIndex, deadline: null};
+        const taskToAdd: Task = {name: task, columnId: column.id, deadline: null};
         const index = column.tasks.push(taskToAdd) - 1;
 
-        const modal = this.modalService.open(ConfigureTaskFormComponent, {
-          centered: true, animation: true, scrollable: false
-        });
-
-        modal.result.then(data => {
+        this.openModal(data => {
           const request = {
-            projectId: this.projectId, taskName: task, columnIndex: columnIndex, deadline: data
+            projectId: this.projectId, taskName: task, columnId: column.id, deadline: data
           };
           taskToAdd.deadline = data;
 
           this.taskService.createTask(request).subscribe({
+            next: id => taskToAdd.id = id,
             error: () => {
               ErrorHandler.showPopupAlert("Can't create the task.", this.modalService);
               column.tasks.splice(index, 1);
             }
           });
-        }, () => {
-          column.tasks.splice(index, 1);
-        });
+        }, () => column.tasks.splice(index, 1))
       }
     }
 
     this.abortTaskCreation();
+  }
+
+  changeTaskDeadline(task: Task) {
+    this.openModal((data) => {
+      const previousDeadline = task.deadline;
+      task.deadline = data;
+
+      const request: ChangeTaskDeadlineDto = {
+        projectId: this.projectId, columnId: task.columnId, taskId: task.id, deadline: data
+      };
+
+      this.taskService.changeTaskDeadline(request).subscribe({
+        error: () => {
+          ErrorHandler.showPopupAlert("Can't change deadline for the task.", this.modalService);
+          task.deadline = previousDeadline;
+        }
+      })
+    }, undefined, task.deadline);
+  }
+
+  private openModal(after: (data: string) => void, close?: () => void, startDate?: string): void {
+    const modal = this.modalService.open(ConfigureTaskFormComponent, {
+      centered: true, animation: true, scrollable: false
+    });
+
+    if (startDate) {
+      const component = modal.componentInstance as ConfigureTaskFormComponent;
+      component.setTimeToPicker(startDate);
+    }
+
+    modal.result.then(data => after(data), () => {
+      if (close) close();
+    });
   }
 
   abortTaskCreation() {
@@ -162,10 +193,11 @@ export class KanbanPageComponent implements OnInit {
     const column = event.target.value as string;
 
     if (column && this.creationNewColumn) {
-      let columnToAdd: ProjectColumn = {name: column, tasks: []};
+      const columnToAdd: ProjectColumn = {name: column, tasks: []};
       const index = this.columns.push(columnToAdd) - 1;
 
       this.columnService.createColumn({projectId: this.projectId, name: column}).subscribe({
+        next: id => columnToAdd.id = id,
         error: () => {
           ErrorHandler.showPopupAlert("Can't create the column.", this.modalService);
           this.columns.splice(index, 1);
@@ -186,7 +218,7 @@ export class KanbanPageComponent implements OnInit {
       const index = this.columns.indexOf(value);
       this.columns.splice(index, 1);
 
-      this.columnService.deleteColumn({index: index, projectId: this.projectId}).subscribe({
+      this.columnService.deleteColumn({columnId: value.id, projectId: this.projectId}).subscribe({
         error: () => {
           this.columns.splice(index, 0, value);
           ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
@@ -194,15 +226,16 @@ export class KanbanPageComponent implements OnInit {
       });
     } else {
       // deleting task
-      const index = this.columns[value.columnIndex].tasks.indexOf(value);
-      this.columns[value.columnIndex].tasks.splice(index, 1);
+      const column = this.columns.find(column => column.id == value.columnId);
+      const index = column.tasks.indexOf(value);
+      column.tasks.splice(index, 1);
 
       this.taskService.deleteTask({
-        taskIndex: index, projectId: this.projectId, columnIndex: value.columnIndex
+        taskId: value.id, projectId: this.projectId, columnId: value.columnId
       }).subscribe({
         error: () => {
           ErrorHandler.showPopupAlert("Can't delete the task.", this.modalService);
-          this.columns[value.columnIndex].tasks.splice(index, 0, value);
+          column.tasks.splice(index, 0, value);
         }
       })
     }
@@ -233,20 +266,20 @@ export class KanbanPageComponent implements OnInit {
     this.changingColumnIndex = -1;
   }
 
-  changeColumnName(event: any, columnIndex: number) {
+  changeColumnName(event: any, column: ProjectColumn) {
     const name = event.target.value as string;
 
     if (name && this.changingColumn) {
-      const previousName = this.columns[columnIndex].name;
+      const previousName = column.name;
 
       if (name != previousName) {
-        this.columns[columnIndex].name = name;
+        column.name = name;
 
         this.columnService.changeColumnName({
-          columnName: name, columnIndex: columnIndex, projectId: this.projectId
+          columnName: name, columnId: column.id, projectId: this.projectId
         }).subscribe({
           error: () => {
-            this.columns[columnIndex].name = previousName;
+            column.name = previousName;
             ErrorHandler.showPopupAlert("Can't rename the column.", this.modalService);
           }
         });
@@ -272,16 +305,17 @@ export class KanbanPageComponent implements OnInit {
     const name = event.target.value as string;
 
     if (name && this.changingTask) {
-      const previousName = this.columns[columnIndex].tasks[taskIndex].name;
+      const task = this.columns[columnIndex].tasks[taskIndex];
+      const previousName = task.name;
 
       if (name != previousName) {
-        this.columns[columnIndex].tasks[taskIndex].name = name;
+        task.name = name;
 
         this.taskService.changeTaskName({
-          taskName: name, taskIndex: taskIndex, columnIndex: columnIndex, projectId: this.projectId
+          taskName: name, taskId: task.id, columnId: task.columnId, projectId: this.projectId
         }).subscribe({
           error: () => {
-            this.columns[columnIndex].tasks[taskIndex].name = previousName;
+            task.name = previousName;
             ErrorHandler.showPopupAlert("Can't rename the task.", this.modalService);
           }
         });
@@ -293,13 +327,8 @@ export class KanbanPageComponent implements OnInit {
 
   showDeadline(deadline: string) {
     const time = moment(deadline);
-    let append = "";
 
-    if (this.isDeadlineViolated(deadline)) {
-      append = " deadline violated!";
-    }
-
-    return time.format("DD.MM.YY, HH:mm") + append;
+    return time.format(DATE_FORMAT);
   }
 
   diffDeadline(deadline: string) {
@@ -308,9 +337,11 @@ export class KanbanPageComponent implements OnInit {
     const days = time.diff(now, "days");
 
     if (days == 0) {
+      if (now.isAfter(time)) {
+        return "Deadline is violated!";
+      }
+
       return "Deadline today!";
-    } else if (days < 0) {
-      return "Deadline is violated"
     } else {
       return "Left " + days + " days to deadline";
     }
@@ -318,8 +349,8 @@ export class KanbanPageComponent implements OnInit {
 
   isDeadlineViolated(deadline: string) {
     const time = moment(deadline);
-    const current = moment();
+    const now = moment();
 
-    return current.isAfter(time);
+    return now.isAfter(time);
   }
 }

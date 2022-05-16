@@ -34,7 +34,7 @@ export class ColumnService {
   }
 
   deleteColumn(request: DeletingColumnDto): Observable<void> {
-    const url = this.url + request.projectId + "/delete/" + request.index;
+    const url = this.url + request.projectId + "/" + request.columnId + "/delete/";
 
     return this.http.delete<void>(url).pipe(
       catchError(this.errorHandler.handle)
@@ -53,7 +53,7 @@ export class ColumnService {
   }
 
   changeColumnName(request: ChangeColumnNameDto): Observable<void> {
-    const url = this.url + request.projectId + "/" + request.columnIndex + "/name";
+    const url = this.url + request.projectId + "/" + request.columnId + "/name";
 
     return this.http.patch<void>(url, {value: request.columnName}).pipe(
       catchError(this.errorHandler.handle)
