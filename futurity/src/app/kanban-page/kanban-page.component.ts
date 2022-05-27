@@ -29,7 +29,8 @@ export class KanbanPageComponent implements OnInit {
   changingTaskIndex: TaskChangingIndex = this.NOT_EXISTING_TASK_INDEX;
   @ViewChild("input_task_change") changingTaskInput: ElementRef;
   @ViewChild("input_box") creationTaskInput: ElementRef;
-  @ViewChild(ContextMenuComponent, {static: true}) basicMenu: ContextMenuComponent;
+  @ViewChild("columnMenu", {static: true}) columnMenu: ContextMenuComponent;
+  @ViewChild("taskMenu", {static: true}) taskMenu: ContextMenuComponent;
 
   creationNewColumn = false;
   changingColumn = false;
@@ -41,6 +42,9 @@ export class KanbanPageComponent implements OnInit {
 
   readonly COLUMN_NAME_LENHGT = 22;
   readonly TASK_NAME_LENHGT = 28;
+  readonly TASK_IS_DONE = "Task is done";
+  readonly DEADLINE_IS_VIOLATED = "Deadline is violated!";
+  readonly DEADLINE_TODAY = "Deadline today!";
 
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
               private columnService: ColumnService, private taskService: TaskService, private modalService: NgbModal) {
@@ -56,7 +60,6 @@ export class KanbanPageComponent implements OnInit {
       },
       error: () => ErrorHandler.showPopupAlert("Can't load the columns.", this.modalService)
     });
-    this.columnsAreLoaded = true;
   }
 
   dropColumn(event: CdkDragDrop<any[]>) {
@@ -193,7 +196,7 @@ export class KanbanPageComponent implements OnInit {
     const column = event.target.value as string;
 
     if (column && this.creationNewColumn) {
-      const columnToAdd: ProjectColumn = {name: column, tasks: []};
+      const columnToAdd: ProjectColumn = {name: column, tasks: [], isDone: false};
       const index = this.columns.push(columnToAdd) - 1;
 
       this.columnService.createColumn({projectId: this.projectId, name: column}).subscribe({
@@ -212,33 +215,31 @@ export class KanbanPageComponent implements OnInit {
     this.creationNewColumn = false;
   }
 
-  delete(value: any) {
-    if (value.tasks) {
-      // deleting column
-      const index = this.columns.indexOf(value);
-      this.columns.splice(index, 1);
+  deleteColumn(value: ProjectColumn) {
+    const index = this.columns.indexOf(value);
+    this.columns.splice(index, 1);
 
-      this.columnService.deleteColumn({columnId: value.id, projectId: this.projectId}).subscribe({
-        error: () => {
-          this.columns.splice(index, 0, value);
-          ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
-        }
-      });
-    } else {
-      // deleting task
-      const column = this.columns.find(column => column.id == value.columnId);
-      const index = column.tasks.indexOf(value);
-      column.tasks.splice(index, 1);
+    this.columnService.deleteColumn({columnId: value.id, projectId: this.projectId}).subscribe({
+      error: () => {
+        this.columns.splice(index, 0, value);
+        ErrorHandler.showPopupAlert("Can't delete the column.", this.modalService);
+      }
+    });
+  }
 
-      this.taskService.deleteTask({
-        taskId: value.id, projectId: this.projectId, columnId: value.columnId
-      }).subscribe({
-        error: () => {
-          ErrorHandler.showPopupAlert("Can't delete the task.", this.modalService);
-          column.tasks.splice(index, 0, value);
-        }
-      })
-    }
+  deleteTask(value: Task) {
+    const column = this.columns.find(column => column.id == value.columnId);
+    const index = column.tasks.indexOf(value);
+    column.tasks.splice(index, 1);
+
+    this.taskService.deleteTask({
+      taskId: value.id, projectId: this.projectId, columnId: value.columnId
+    }).subscribe({
+      error: () => {
+        ErrorHandler.showPopupAlert("Can't delete the task.", this.modalService);
+        column.tasks.splice(index, 0, value);
+      }
+    })
   }
 
   startCreateTask(index: number) {
@@ -331,26 +332,57 @@ export class KanbanPageComponent implements OnInit {
     return time.format(DATE_FORMAT);
   }
 
-  diffDeadline(deadline: string) {
+  diffDeadline(deadline: string, isDone: boolean) {
+    if (isDone) return this.TASK_IS_DONE;
+
     const time = moment(deadline);
     const now = moment();
     const days = time.diff(now, "days");
 
     if (days == 0) {
       if (now.isAfter(time)) {
-        return "Deadline is violated!";
+        return this.DEADLINE_IS_VIOLATED;
       }
 
-      return "Deadline today!";
+      return this.DEADLINE_TODAY;
     } else {
       return "Left " + days + " days to deadline";
     }
   }
 
-  isDeadlineViolated(deadline: string) {
+  isDeadlineViolated(deadline: string, isDone: boolean) {
+    if (isDone) {
+      return false;
+    }
     const time = moment(deadline);
     const now = moment();
 
     return now.isAfter(time);
+  }
+
+  markColumn(column: ProjectColumn) {
+    const columnToDisable = this.columns.find(column => column.isDone == true);
+
+    if (columnToDisable) {
+      columnToDisable.isDone = false;
+    }
+
+    column.isDone = true;
+
+    this.columnService.markColumn({
+      projectId: this.projectId,
+      columnIdToUnmark: columnToDisable ? columnToDisable.id : null,
+      columnIdToMark: column.id
+    }).subscribe({
+      error: () => {
+        column.isDone = false;
+
+        if (columnToDisable) {
+          columnToDisable.isDone = true;
+        }
+
+        ErrorHandler.showPopupAlert("Can't mark the column.", this.modalService);
+      }
+    });
   }
 }

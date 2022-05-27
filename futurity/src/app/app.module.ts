@@ -29,7 +29,7 @@ import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
 import { ConfigureTaskFormComponent } from './configure-task-form/configure-task-form.component';
 import {OWL_DATE_TIME_FORMATS, OwlDateTimeModule} from "ng-pick-datetime";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NgxBootstrapIconsModule, power} from "ngx-bootstrap-icons";
+import {NgxBootstrapIconsModule, power, check2Circle, checkLg} from "ngx-bootstrap-icons";
 import {MOMENT_FORMAT} from "./shared/interfaces/time";
 import {OwlMomentDateTimeModule} from "ng-pick-datetime-moment-ng9";
 
@@ -70,7 +70,7 @@ import {OwlMomentDateTimeModule} from "ng-pick-datetime-moment-ng9";
     OwlDateTimeModule,
     OwlMomentDateTimeModule,
     BrowserAnimationsModule,
-    NgxBootstrapIconsModule.pick({power})
+    NgxBootstrapIconsModule.pick({power, check2Circle, checkLg})
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true},

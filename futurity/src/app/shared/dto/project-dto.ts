@@ -58,3 +58,9 @@ export interface ChangeTaskDeadlineDto {
   taskId: number;
   deadline: string;
 }
+
+export interface MarkColumnDto {
+  projectId: number;
+  columnIdToUnmark?: number;
+  columnIdToMark: number;
+}

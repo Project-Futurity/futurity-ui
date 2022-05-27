@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {
   ChangeColumnIndexDto, ChangeColumnNameDto,
-  CreationColumnDto, DeletingColumnDto,
+  CreationColumnDto, DeletingColumnDto, MarkColumnDto,
 } from "../dto/project-dto";
 import {Observable} from "rxjs";
 import {ErrorHandler} from "./error-handler";
@@ -15,7 +15,8 @@ import {ProjectColumn} from "../interfaces/project-ui";
 export class ColumnService {
   private readonly url = "/project/column/";
 
-  constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
+  constructor(private http: HttpClient, private errorHandler: ErrorHandler) {
+  }
 
   getColumns(projectId: number): Observable<ProjectColumn[]> {
     const url = this.url + projectId + "/";
@@ -56,6 +57,20 @@ export class ColumnService {
     const url = this.url + request.projectId + "/" + request.columnId + "/name";
 
     return this.http.patch<void>(url, {value: request.columnName}).pipe(
+      catchError(this.errorHandler.handle)
+    );
+  }
+
+  markColumn(request: MarkColumnDto): Observable<void> {
+    const url = this.url + request.projectId + "/mark";
+    let params = new HttpParams();
+    params = params.append("columnIdToMark", request.columnIdToMark);
+
+    if (request.columnIdToUnmark) {
+      params = params.append("columnIdToUnmark", request.columnIdToUnmark);
+    }
+
+    return this.http.patch<void>(url, params).pipe(
       catchError(this.errorHandler.handle)
     );
   }

@@ -19,6 +19,7 @@ export interface ProjectColumn {
   id?: number,
   name: string;
   tasks: Task[];
+  isDone: boolean;
 }
 
 export interface Task {
