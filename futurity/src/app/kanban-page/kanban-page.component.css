@@ -26,7 +26,6 @@
   font-size: 24px;
   box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.164);
   cursor: move;
-  position: relative;
 }
 
 .column:last-child {
@@ -57,7 +56,6 @@
   margin-top: 10px;
   font-size: 22px;
   border-radius: 5px;
-  position: relative;
 }
 
 .add {
@@ -136,9 +134,16 @@
   margin-left: auto;
 }
 
-.column-check {
-  position: absolute;
-  margin-left: 125px;
+.padding-left {
+  padding-left: 20px;
+}
+
+.padding-left-29 {
+  padding-left: 29px;
+}
+
+.padding-right {
+  padding-right: 9px;
 }
 
 .task-check {

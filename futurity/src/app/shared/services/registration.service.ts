@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {RegistrationDto} from "../dto/auth-dto";
-import {FormBuilder, FormGroup} from "@angular/forms";
 import {Observable} from "rxjs";
 import {catchError} from "rxjs/operators";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrationService {
-  private url = "/auth";
+  private url = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {
   }

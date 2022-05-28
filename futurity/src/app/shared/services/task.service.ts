@@ -10,12 +10,13 @@ import {
   DeletingTaskDto
 } from "../dto/project-dto";
 import {catchError} from "rxjs/operators";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  private readonly url = "/project/task/"
+  private readonly url = environment.apiUrl + "/project/task/"
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 

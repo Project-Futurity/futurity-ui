@@ -5,13 +5,14 @@ import {HttpClient} from "@angular/common/http";
 import {ErrorHandler} from "./error-handler";
 import {catchError, tap} from "rxjs/operators";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   public static readonly TOKEN_KEY = "token";
-  private url = "/auth";
+  private url = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler, private jwtHelper: JwtHelperService) {}
 

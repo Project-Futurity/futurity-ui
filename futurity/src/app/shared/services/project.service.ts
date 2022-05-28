@@ -6,12 +6,13 @@ import {catchError, map} from "rxjs/operators";
 import {FileReaderService} from "./file-reader.service";
 import {CreationProjectDto} from "../dto/project-dto";
 import {Project, ProjectUi} from "../interfaces/project-ui";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private url = "/project";
+  private url = environment.apiUrl + "/project";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler, private readerService: FileReaderService) {
   }

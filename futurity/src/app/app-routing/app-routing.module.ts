@@ -8,6 +8,7 @@ import {LoginedLayoutComponent} from "../shared/layouts/logined-layout/logined-l
 import {ProjectsPageComponent} from "../projects-page/projects-page.component";
 import {NotLoginedGuard} from "../shared/guards/not-logined.guard";
 import {KanbanPageComponent} from "../kanban-page/kanban-page.component";
+import {LoginGuard} from "../shared/guards/login.guard";
 
 
 const routes: Routes = [
@@ -19,7 +20,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: "projects", component: LoginedLayoutComponent, children: [
+    path: "projects", component: LoginedLayoutComponent, canActivate: [LoginGuard], children: [
       {path: "", component: ProjectsPageComponent},
       {path: "board/:id", component: KanbanPageComponent}
     ]

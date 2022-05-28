@@ -4,12 +4,13 @@ import {FileReaderService} from "./file-reader.service";
 import {Observable} from "rxjs";
 import {FileMetaInfo} from "../interfaces/file-meta-info";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private url = "/user";
+  private url = environment.apiUrl + "/user";
 
   constructor(private loginService: LoginService, private fileReaderService: FileReaderService,
               private router: Router) {}

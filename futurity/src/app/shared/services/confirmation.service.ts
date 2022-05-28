@@ -4,12 +4,13 @@ import {Observable} from "rxjs";
 import {ConfirmationCodeDto, ConfirmationEmailDto} from "../dto/confirmation-dto";
 import {catchError} from "rxjs/operators";
 import {ErrorHandler} from "./error-handler";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfirmationService {
-  private url = "/auth";
+  private url = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 

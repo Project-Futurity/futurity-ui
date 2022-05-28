@@ -8,12 +8,13 @@ import {Observable} from "rxjs";
 import {ErrorHandler} from "./error-handler";
 import {catchError} from "rxjs/operators";
 import {ProjectColumn} from "../interfaces/project-ui";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColumnService {
-  private readonly url = "/project/column/";
+  private readonly url = environment.apiUrl + "/project/column/";
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) {
   }
