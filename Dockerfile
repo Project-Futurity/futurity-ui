@@ -1,6 +1,7 @@
 FROM node:15-alpine as builder
 WORKDIR /app
 COPY ./futurity .
+ENV NODE_OPTIONS=--max_old_space_size=2048
 RUN npm i && npm run build
 
 FROM nginx:alpine
