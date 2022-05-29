@@ -1,0 +1,6 @@
+node_modules
+dist
+README.md
+.gitignore
+proxy.conf.json
+.idea
