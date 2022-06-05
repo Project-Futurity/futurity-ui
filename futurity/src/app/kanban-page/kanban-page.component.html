@@ -36,10 +36,7 @@
              }">
           <div class="d-flex flex-row-reverse justify-content-center w-100">
               <i-bs *ngIf="changingTaskIndex.taskIndex != ti && column.isDone" class="cursor-pointer" name="check-lg"
-                    [ngbTooltip]="this.TASK_IS_DONE" width="20px" height="20px" [ngStyle]="{
-                   'margin-bottom': task.deadline != null ? '35px' : '0'
-                }"
-              ></i-bs>
+                    [ngbTooltip]="this.TASK_IS_DONE" width="20px" height="20px"></i-bs>
               <div class="text-nowrap overflow-hidden text-truncate cursor-pointer mx-auto"
                    *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
                    (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})"

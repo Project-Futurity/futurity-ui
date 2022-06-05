@@ -14,7 +14,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError(err => {
-        if (err.status === 401 && err.error.message === "The access token is expired") {
+
+        if (err.status === 401) {
           return this.handleUnauthorizedError(req, next);
         }
 

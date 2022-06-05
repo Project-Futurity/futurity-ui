@@ -26,7 +26,7 @@ import {AlertPopupComponent} from './alert-popup/alert-popup.component';
 import {KanbanPageComponent} from './kanban-page/kanban-page.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {DragScrollDirective} from "./shared/directives/drag-scroll.directive";
-import { ConfigureTaskFormComponent } from './configure-task-form/configure-task-form.component';
+import {ConfigureTaskFormComponent} from './configure-task-form/configure-task-form.component';
 import {OWL_DATE_TIME_FORMATS, OwlDateTimeModule} from "ng-pick-datetime";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgxBootstrapIconsModule, power, check2Circle, checkLg} from "ngx-bootstrap-icons";
