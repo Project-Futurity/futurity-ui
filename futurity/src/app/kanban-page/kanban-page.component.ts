@@ -339,14 +339,12 @@ export class KanbanPageComponent implements OnInit {
     const now = moment();
     const days = time.diff(now, "days");
 
-    if (days == 0) {
-      if (now.isAfter(time)) {
-        return this.DEADLINE_IS_VIOLATED;
-      }
-
+    if (days > 0) {
+      return "Left " + days + " days to deadline";
+    } else if (days == 0) {
       return this.DEADLINE_TODAY;
     } else {
-      return "Left " + days + " days to deadline";
+      return this.DEADLINE_IS_VIOLATED;
     }
   }
 
