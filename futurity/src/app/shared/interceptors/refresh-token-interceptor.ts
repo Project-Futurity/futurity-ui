@@ -30,7 +30,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         this.loginService.saveToken(token);
 
         return next.handle(this.addTokenToHeader(request, token.token));
-      })
+      }),
+      // TODO: make handling refresh token expiring
     );
   }
 

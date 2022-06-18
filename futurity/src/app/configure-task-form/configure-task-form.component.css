@@ -8,7 +8,7 @@
   border-bottom-right-radius: 35px;
 }
 
-::ng-deep .modal-content {
+:host ::ng-deep .modal-content {
   border-radius: 35px;
   background: rgb(70, 70, 70);
 }

@@ -44,7 +44,7 @@ export class KanbanPageComponent implements OnInit {
   readonly TASK_NAME_LENHGT = 28;
   readonly TASK_IS_DONE = "Task is done";
   readonly DEADLINE_IS_VIOLATED = "Deadline is violated!";
-  readonly DEADLINE_TODAY = "Deadline today!";
+  readonly DEADLINE_TODAY = "Left less then 24 hours";
 
   constructor(private changeDetector: ChangeDetectorRef, private route: ActivatedRoute,
               private columnService: ColumnService, private taskService: TaskService, private modalService: NgbModal) {

@@ -8,12 +8,12 @@
   border-bottom-right-radius: 20px;
 }
 
-::ng-deep .modal-dialog {
+:host ::ng-deep .modal-dialog {
   width: 450px;
   margin: auto;
 }
 
-::ng-deep .modal-content {
+:host ::ng-deep .modal-content {
   border-radius: 25px;
   background: #282c35;
 }
@@ -85,7 +85,7 @@ textarea:focus {
 }
 
 @media (max-width: 576px) {
-  ::ng-deep .modal-dialog {
+  :host ::ng-deep .modal-dialog {
     width: 300px;
     padding-top: 20px;
     padding-bottom: 20px;
