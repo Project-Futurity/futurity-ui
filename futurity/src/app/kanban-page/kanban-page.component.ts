@@ -341,10 +341,11 @@ export class KanbanPageComponent implements OnInit {
 
     if (days > 0) {
       return "Left " + days + " days to deadline";
-    } else if (days == 0) {
-      return this.DEADLINE_TODAY;
     } else {
-      return this.DEADLINE_IS_VIOLATED;
+      if (now.isAfter(time)) {
+        return this.DEADLINE_IS_VIOLATED;
+      }
+      return this.DEADLINE_TODAY;
     }
   }
 
