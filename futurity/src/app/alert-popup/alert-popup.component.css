@@ -12,11 +12,6 @@
   border-bottom-right-radius: 20px;
 }
 
-:host ::ng-deep .modal-content {
-  border-radius: 25px;
-  background: #282c35;
-}
-
 .modal-header, .modal-footer {
   border-color: #FFFF00;
   background: #232129;
@@ -32,7 +27,7 @@
 }
 
 @media (max-width: 576px) {
-  :host ::ng-deep .modal-dialog {
+  ::ng-deep .modal-dialog {
     width: 300px;
     padding-top: 20px;
     padding-bottom: 20px;
