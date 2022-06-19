@@ -1,4 +1,12 @@
-import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component, ElementRef,
+  EventEmitter, Inject,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {NgbActiveModal, NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertConfiguratorService, AlertType} from "../shared/services/alert-configurator.service";
@@ -6,13 +14,14 @@ import {AvatarService} from "../shared/services/avatar.service";
 import {ProjectService} from "../shared/services/project.service";
 import {CreationProjectDto} from "../shared/dto/project-dto";
 import {Project} from "../shared/interfaces/project-ui";
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-creation-project-form',
   templateUrl: './creation-project-form.component.html',
   styleUrls: ['./creation-project-form.component.css']
 })
-export class CreationProjectFormComponent implements OnInit {
+export class CreationProjectFormComponent implements OnInit, AfterViewInit {
   projectForm: FormGroup;
   disableCreationButton = false;
   projectInfo: string = null;
@@ -21,7 +30,7 @@ export class CreationProjectFormComponent implements OnInit {
 
   constructor(public activeModal: NgbActiveModal, private changeDetector: ChangeDetectorRef,
               private alertConfigurator: AlertConfiguratorService, private avatarService: AvatarService,
-              private projectService: ProjectService) {
+              private projectService: ProjectService, @Inject(DOCUMENT) private document: Document) {
   }
 
   ngOnInit(): void {
@@ -31,6 +40,17 @@ export class CreationProjectFormComponent implements OnInit {
     });
 
     this.avatarService.loadDefaultAvatar("assets/code-project.jpeg");
+  }
+
+  ngAfterViewInit() {
+    const dialog = this.document.querySelector(".modal-dialog") as any;
+    const content = this.document.querySelector(".modal-content") as any;
+
+    dialog.style.width = "450px";
+    dialog.style.margin = "auto";
+
+    content.style.borderRadius = "25px";
+    content.style.background = "#282c35";
   }
 
   onSubmit() {

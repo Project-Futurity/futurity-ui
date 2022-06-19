@@ -1,14 +1,10 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DateValidator} from "../shared/validators/date-validator";
 import * as moment from "moment";
-import {OWL_DATE_TIME_FORMATS} from "ng-pick-datetime";
-import {OWL_NATIVE_DATE_TIME_FORMATS} from "ng-pick-datetime/date-time/adapter/native-date-time-format.class";
-import {
-  OWL_MOMENT_DATE_TIME_FORMATS
-} from "ng-pick-datetime/date-time/adapter/moment-adapter/moment-date-time-format.class";
 import {DATE_FORMAT} from "../shared/interfaces/time";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'app-configure-task-form',
@@ -23,7 +19,7 @@ export class ConfigureTaskFormComponent implements OnInit, AfterViewInit {
 
   startDate: string;
 
-  constructor(public activeModal: NgbActiveModal) {
+  constructor(public activeModal: NgbActiveModal, @Inject(DOCUMENT) private document: Document) {
   }
 
   toggleDeadLine() {
@@ -42,6 +38,10 @@ export class ConfigureTaskFormComponent implements OnInit, AfterViewInit {
     if (this.startDate) {
       this.datePicker.nativeElement.value = this.startDate;
     }
+    const content = this.document.querySelector(".modal-content") as any;
+
+    content.style.borderRadius = "35px";
+    content.style.background = "rgb(70, 70, 70)";
   }
 
   onSubmit() {
