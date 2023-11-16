@@ -56,7 +56,7 @@ export class TaskService {
   changeTaskDeadline(request: ChangeTaskDeadlineDto): Observable<void> {
     const url = this.url + request.projectId + "/" + request.columnId + "/" + request.taskId + "/deadline";
 
-    return this.http.patch<void>(url, {value: request.deadline}).pipe(
+    return this.http.patch<void>(url, {deadline: request.deadline}).pipe(
       catchError(this.errorHandler.handle)
     );
   }

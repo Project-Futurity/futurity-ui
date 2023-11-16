@@ -20,7 +20,7 @@ export class ColumnService {
   }
 
   getColumns(projectId: number): Observable<ProjectColumn[]> {
-    const url = this.url + projectId + "/";
+    const url = this.url + projectId;
 
     return this.http.get<ProjectColumn[]>(url).pipe(
       catchError(this.errorHandler.handle),
@@ -36,7 +36,7 @@ export class ColumnService {
   }
 
   deleteColumn(request: DeletingColumnDto): Observable<void> {
-    const url = this.url + request.projectId + "/" + request.columnId + "/delete/";
+    const url = this.url + request.projectId + "/" + request.columnId + "/delete";
 
     return this.http.delete<void>(url).pipe(
       catchError(this.errorHandler.handle)

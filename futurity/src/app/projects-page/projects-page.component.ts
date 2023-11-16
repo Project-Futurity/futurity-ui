@@ -129,7 +129,7 @@ export class ProjectsPageComponent implements OnInit {
       if (description != previousDescription) {
         this.projects[projectIndex].project.description = description;
 
-        this.projectService.changeProjectDescription(this.projects[projectIndex].project.id, previousDescription).subscribe({
+        this.projectService.changeProjectDescription(this.projects[projectIndex].project.id, description).subscribe({
           error: () => {
             this.projects[projectIndex].project.description = previousDescription;
             ErrorHandler.showPopupAlert("Can't change description the project.", this.modalService)
