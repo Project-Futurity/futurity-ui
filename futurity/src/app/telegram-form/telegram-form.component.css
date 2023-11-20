@@ -1,0 +1,39 @@
+:host ::ng-deep .modal-dialog {
+  margin: auto !important;
+}
+
+.close {
+  outline: none;
+  color: #FFFF00;
+  font-size: 28px;
+}
+
+.modal-header {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background: #282c35;
+  border: none;
+  height: 20px;
+}
+
+.btn {
+  margin-right: 0;
+}
+
+.background {
+  background: #282c35;
+}
+
+.img-width {
+  width: 200px;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.modal-footer {
+  border: none;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}

@@ -32,6 +32,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgxBootstrapIconsModule, power, check2Circle, checkLg} from "ngx-bootstrap-icons";
 import {MOMENT_FORMAT} from "./shared/interfaces/time";
 import {OwlMomentDateTimeModule} from "ng-pick-datetime-moment-ng9";
+import { TelegramFormComponent } from './telegram-form/telegram-form.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {OwlMomentDateTimeModule} from "ng-pick-datetime-moment-ng9";
     AlertPopupComponent,
     KanbanPageComponent,
     DragScrollDirective,
-    ConfigureTaskFormComponent
+    ConfigureTaskFormComponent,
+    TelegramFormComponent
   ],
   imports: [
     BrowserModule,

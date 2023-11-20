@@ -14,7 +14,7 @@ export class LoginService {
   public static readonly TOKEN_KEY = "token";
   private url = environment.apiUrl + "/auth";
 
-  constructor(private http: HttpClient, private errorHandler: ErrorHandler, private jwtHelper: JwtHelperService) {}
+  constructor(private http: HttpClient, private errorHandler: ErrorHandler) {}
 
   login(user: LoginDto): Observable<any> {
     return this.http.post<TokenDto>(this.url + "/login", user).pipe(
