@@ -1,0 +1,11 @@
+<div class="modal-header text-center">
+  <button type="button" class="close border-0" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="w-100 d-flex flex-column align-items-center justify-content-center background">
+  <img class="img-fluid img-width" src="assets/telegram.png">
+  <a class="btn mt-4" *ngIf="!userInfo.hasTelegram" [href]="buildUrl()">Join Telegram</a>
+  <button class="btn mt-4 disabled cursor-default" *ngIf="userInfo.hasTelegram">You have joined to Futurity</button>
+</div>
+<div class="modal-footer mt-2"></div>

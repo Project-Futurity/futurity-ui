@@ -1,0 +1,30 @@
+.wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-file, .upload-file-button  {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-file-button, .wrapper {
+  transition: 0.2s;
+}
+
+.wrapper:hover {
+  box-shadow: 1px 1px 15px -5px black;
+}
+
+.wrapper:hover, .wrapper:hover .upload-file-button  {
+  transform: scale(1.05);
+}
+
+.wrapper:hover .upload-file-button {
+  opacity: 0.8;
+}

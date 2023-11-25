@@ -1,0 +1,96 @@
+<div class="position-absolute h-100 w-100 container-absolute">
+  <div cdkDropList cdkDropListGroup cdkDropListOrientation="horizontal"
+       [cdkDropListData]="columns" (cdkDropListDropped)="dropColumn($event)"
+       class="container-fluid d-flex align-items-start body-padding"
+       [cdkDropListAutoScrollStep]="10" cdkScrollable #container dragScroll [drag-scroll-disable]="['column']">
+    <div class="spinner-border mx-auto" role="status" *ngIf="!columnsAreLoaded"></div>
+    <div class="column text-center p-3" *ngFor="let column of columns; let i = index" cdkDrag cdkScrollable
+         [contextMenu]="columnMenu" [contextMenuSubject]="column"
+    >
+      <div class="d-flex flex-row-reverse justify-content-center">
+        <i-bs *ngIf="changingColumnIndex != i && column.isDone" width="20px" height="20px"
+              class="cursor-pointer padding-right" name="check2-circle"
+              [ngbTooltip]="'Move a task to this column to mark it as \'done\''"></i-bs>
+        <h4 class="mt-2 mb-2 mx-auto text-nowrap overflow-hidden text-truncate cursor-pointer"
+            (click)="startChangeColumnName(i)" *ngIf="changingColumnIndex !== i"
+            [ngClass]="{
+              'px-3': column.name.length > COLUMN_NAME_LENHGT,
+              'padding-left-29': column.isDone
+            }"
+            [ngbTooltip]="column.name.length > COLUMN_NAME_LENHGT ? column.name : null">
+          {{column.name}}
+        </h4>
+      </div>
+      <input type="text" class="mt-2 mb-2 box-input" [value]="column.name" *ngIf="changingColumnIndex === i"
+             (blur)="changeColumnName($event, column)"
+             (keyup.enter)="changeColumnName($event, column)"
+             (keyup.escape)="abortColumnChanging()"
+             #input_column_change>
+      <div class="list" cdkDropList [cdkDropListData]="column.tasks" (cdkDropListDropped)="dropTask($event, i)"
+           cdkScrollable [cdkDropListAutoScrollStep]="10"
+           [ngStyle]="{'max-height': (container.offsetHeight - 150) + 'px'}">
+        <div class="box d-flex flex-column" *ngFor="let task of column.tasks; let ti = index;" cdkDrag
+             [contextMenu]="taskMenu"
+             [contextMenuSubject]="task" [ngStyle]="{
+              'border': this.isDeadlineViolated(task.deadline, column.isDone) ? '3px solid rgb(248, 118, 118)' : 'rgb(94, 93, 93)'
+             }">
+          <div class="d-flex flex-row-reverse justify-content-center w-100">
+              <i-bs *ngIf="changingTaskIndex.taskIndex != ti && column.isDone" class="cursor-pointer" name="check-lg"
+                    [ngbTooltip]="this.TASK_IS_DONE" width="20px" height="20px"></i-bs>
+              <div class="text-nowrap overflow-hidden text-truncate cursor-pointer mx-auto"
+                   *ngIf="i !== changingTaskIndex.columnIndex || ti !== changingTaskIndex.taskIndex"
+                   (click)="startChangeTaskName({columnIndex: i, taskIndex: ti})"
+                   [ngClass]="{
+                      'px-3': task.name.length > TASK_NAME_LENHGT,
+                      'padding-left': column.isDone
+                   }"
+                   [ngbTooltip]="task.name.length > TASK_NAME_LENHGT ? task.name : null"
+              >
+                {{task.name}}
+              </div>
+          </div>
+          <input type="text" class="box-input p-0" [value]="task.name" *ngIf="i === changingTaskIndex.columnIndex
+           && ti === changingTaskIndex.taskIndex"
+                 (blur)="changeTaskName($event, i, ti)"
+                 (keyup.enter)="changeTaskName($event, i, ti)"
+                 (keyup.escape)="abortTaskChanging()"
+                 #input_task_change>
+          <div class="deadline-text cursor-pointer" *ngIf="task.deadline != null"
+               [ngbTooltip]="diffDeadline(task.deadline, column.isDone)"
+          >
+            {{showDeadline(task.deadline)}}
+          </div>
+        </div>
+      </div>
+      <div class="box" *ngIf="creationNewTask && i === creationColumnIndex">
+        <input class="box-input" type="text"
+               (blur)="creationTaskUnFocus($event)"
+               (keyup.enter)="creationTaskUnFocus($event)"
+               (keyup.escape)="abortTaskCreation()" #input_box>
+      </div>
+      <div class="box add" (click)="startCreateTask(i)"
+           *ngIf="!creationNewTask || i !== creationColumnIndex"
+      >+
+      </div>
+    </div>
+    <div class="column text-center p-3" *ngIf="creationNewColumn">
+      <input type="text" class="mt-2 mb-2 box-input"
+             (blur)="creationColumnUnFocus($event)"
+             (keyup.enter)="creationColumnUnFocus($event)"
+             (keyup.escape)="abortColumnCreation()"
+             #input_column>
+    </div>
+    <div class="column text-center p-3 column-add" (click)="startCreateColumn()"
+         *ngIf="!creationNewColumn && columnsAreLoaded">
+      <h2 class="mt-1 mb-1">+</h2>
+    </div>
+  </div>
+</div>
+<context-menu #columnMenu>
+  <ng-template contextMenuItem let-item (execute)="deleteColumn($event.item)">Delete {{item.name}}</ng-template>
+  <ng-template contextMenuItem (execute)="markColumn($event.item)">Mark column as 'Done'</ng-template>
+</context-menu>
+<context-menu #taskMenu>
+  <ng-template contextMenuItem (execute)="changeTaskDeadline($event.item)">Change deadline</ng-template>
+  <ng-template contextMenuItem let-item (execute)="deleteTask($event.item)">Delete {{item.name}}</ng-template>
+</context-menu>

@@ -3,20 +3,28 @@ import {HomePageComponent} from "../home-page/home-page.component";
 import {NgModule} from "@angular/core";
 import {NotLoginedLayoutComponent} from "../shared/layouts/not-logined-layout/not-logined-layout.component";
 import {LoginPageComponent} from "../login-page/login-page.component";
-import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
-import {RegisterUserDataPageComponent} from "../register-user-data-page/register-user-data-page.component";
-import {RegisterUserDataCanActivateGuard} from "../shared/guards/register-user-data-can-activate.guard";
+import {RegistrationPageComponent} from "../registration-page/registration-page.component";
+import {LoginedLayoutComponent} from "../shared/layouts/logined-layout/logined-layout.component";
+import {ProjectsPageComponent} from "../projects-page/projects-page.component";
+import {NotLoginedGuard} from "../shared/guards/not-logined.guard";
+import {KanbanPageComponent} from "../kanban-page/kanban-page.component";
+import {LoginGuard} from "../shared/guards/login.guard";
 
 
 const routes: Routes = [
   {
-    path: "", component: NotLoginedLayoutComponent, children: [
+    path: "", component: NotLoginedLayoutComponent, canActivate: [NotLoginedGuard], children: [
       {path: "", component: HomePageComponent},
       {path: "login", component: LoginPageComponent},
-      {path: "singup", component: RegisterEmailPageComponent},
-      {path: "register", component: RegisterUserDataPageComponent, canActivate: [RegisterUserDataCanActivateGuard]}
+      {path: "singup", component: RegistrationPageComponent},
     ]
-  }
+  },
+  {
+    path: "projects", component: LoginedLayoutComponent, canActivate: [LoginGuard], children: [
+      {path: "", component: ProjectsPageComponent},
+      {path: "board/:id", component: KanbanPageComponent}
+    ]
+  },
 ];
 
 @NgModule({

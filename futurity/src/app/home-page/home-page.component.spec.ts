@@ -5,7 +5,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Location} from "@angular/common";
-import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
+import {RegisterEmailFormComponent} from "../register-email-page/register-email-form.component";
 import {sharedEmailTest} from "../shared/tests/email-test";
 
 describe("HomePageComponent", () => {
@@ -18,7 +18,7 @@ describe("HomePageComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
-        {path: "singup", component: RegisterEmailPageComponent}
+        {path: "singup", component: RegisterEmailFormComponent}
       ]), ReactiveFormsModule, FormsModule],
       declarations: [HomePageComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

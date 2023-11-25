@@ -1,0 +1,50 @@
+<div class="container-fluid p-4">
+  <div class="card">
+    <form class="card-body d-flex flex-column align-items-center" [formGroup]="emailInputForm" (ngSubmit)="onSubmit()">
+      <div class="card-title mt-1 mt-sm-3 py-3">Welcome to Futurity</div>
+
+      <ngb-alert #alert class="text-center" [type]="alert.type" *ngIf="emailInfo">
+        {{emailInfo}}
+      </ngb-alert>
+
+      <div class="position-relative input-width">
+        <input class="terminal-input" type="text" required formControlName="email" id="email">
+        <label class="label-input">Email</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+      </div>
+
+      <div class="position-relative mt-5 mb-3 input-width" *ngIf="isEmailSend">
+        <input class="terminal-input" type="text" required formControlName="code" id="code">
+        <label class="label-input">Code</label>
+        <span class="bar"></span>
+        <div class="term">></div>
+
+        <span class="error-message position-absolute"
+              *ngIf="emailInputForm.get('code').touched && emailInputForm.get('code').invalid"
+        >
+          The code must be 6 numbers
+        </span>
+      </div>
+
+      <ngb-alert class="text-center mt-3 mb-0" *ngIf="showSendAgainTip" [dismissible]="false" type="dark">
+        If you have not got the message then
+        <br>
+        <div class="link" (click)="sendAgain()">try to send it again</div>
+      </ngb-alert>
+
+      <button type="submit" class="btn mx-0 mt-3 mt-sm-4"
+              [disabled]="isFormInvalid() || disableContinueButton"
+              [ngStyle]="{
+                  'pointer-events': isFormInvalid() ? 'none' : 'auto'
+                }"
+      >
+        Continue
+      </button>
+
+      <a class="row mt-4 mt-sm-4 auth-text cursor-pointer text-center terms">By clicking “Continue”, you agree to <br>
+        our terms of service</a>
+      <a routerLink="/login" class="row mt-3 mb-2 auth-text cursor-pointer">Already have an account? Log in</a>
+    </form>
+  </div>
+</div>

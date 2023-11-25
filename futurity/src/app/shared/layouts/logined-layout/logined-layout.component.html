@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand-md navbar-dark header-footer-bg py-3 yellow-border-bottom d-flex justify-content-between">
+  <div class="avatar d-flex justify-content-center align-items-center" (click)="openCreationModal()">
+    <img class="img-fluid" [src]="avatar" *ngIf="avatarIsLoad">
+    <div class="spinner-grow text-warning" role="status" *ngIf="!avatarIsLoad"></div>
+  </div>
+  <a class="navbar-brand navbar-brand align-items-center cursor-pointer d-none d-sm-flex" routerLink="/projects">
+    <img src="assets/terminal.png" width="60" height="60">
+    <span class="navbar-brand-name">Futurity</span>
+  </a>
+  <button class="btn" (click)="logout()">Logout</button>
+</nav>
+<div class="spinner-border" role="status" *ngIf="isUserInfoLoading"></div>
+<div class="loading" *ngIf="isUserInfoLoading"></div>
+<router-outlet></router-outlet>

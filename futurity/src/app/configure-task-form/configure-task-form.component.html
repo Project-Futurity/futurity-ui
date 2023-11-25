@@ -1,0 +1,28 @@
+<div class="modal-header text-center">
+  <h5 class="modal-title text w-100">Configuration task</h5>
+</div>
+<form class="modal-body px-2 py-1 w-100" [formGroup]="deadlineForm">
+  <div class="input-group align-items-center justify-content-center ">
+    <input class="date-picker" placeholder="Select a deadline for this task" [owlDateTime]="dt1"
+           [owlDateTimeTrigger]="dt1" [min]="currentTime()" #date_picker
+           formControlName="deadline" id="deadline"
+    >
+    <div class="append pr-4 m-0" [ngStyle]="{
+            'border-color': disableDeadLine ? '#373839' : '#1b1e21'
+         }"
+         [ngbTooltip]="(disableDeadLine ?  'Enable ' : 'Disable ') + 'deadline for this task'"
+    >
+      <i-bs class="cursor-pointer" style="color: #dadada" height="18px" width="18px" name="power"
+            (click)="toggleDeadLine()"></i-bs>
+    </div>
+  </div>
+  <owl-date-time #dt1 [disabled]="disableDeadLine"></owl-date-time>
+</form>
+<div class="modal-footer align-items-center justify-content-center py-3 w-100">
+  <button class="btn" (click)="onSubmit()" [disabled]="deadlineForm.invalid && !this.disableDeadLine"
+          [ngStyle]="{
+                  'pointer-events': deadlineForm.invalid && !this.disableDeadLine ? 'none' : 'auto'
+                }">
+    Set
+  </button>
+</div>

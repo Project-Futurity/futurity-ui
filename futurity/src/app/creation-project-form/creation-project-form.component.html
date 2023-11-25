@@ -1,0 +1,43 @@
+<div class="modal-header text-center">
+  <h5 class="modal-title w-100">Creation a project</h5>
+  <button type="button" class="close border-0" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form class="w-100 project-form" [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body px-0 w-100 d-flex align-items-center justify-content-center flex-column">
+
+    <ngb-alert #alert class="text-center my-3 input-width " [type]="alert.type" *ngIf="projectInfo">
+      {{projectInfo}}
+    </ngb-alert>
+
+    <div class="position-relative mt-3 input-width">
+      <input class="terminal-input" type="text" required formControlName="name" id="name">
+      <label class="label-input">Project name</label>
+      <span class="bar"></span>
+    </div>
+
+    <div class="position-relative mt-4 input-width">
+      <textarea class="form-control mt-3" rows="5" placeholder="Description" required
+                formControlName="description" id="description"></textarea>
+    </div>
+
+    <div class="position-relative mt-4 mb-3 input-width">
+      <div class="background-text text-center">Choose project preview</div>
+      <div class="wrapper mt-2">
+        <img class="img-fluid background" [src]="getAvatar()">
+        <div class="upload-file-button d-flex align-items-center justify-content-center">
+          <img class="img-fluid background" src="assets/project-plus.png">
+        </div>
+        <input class="upload-file" type="file" accept=".png, .jpeg, .gif" (change)="onChangeAvatar($event)">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer align-items-center justify-content-center py-3 w-100">
+    <button class="btn m-0" [disabled]="projectForm.invalid || disableCreationButton"
+            [ngStyle]="{
+                  'pointer-events': projectForm.invalid ? 'none' : 'auto'
+                }">
+      Create</button>
+  </div>
+</form>

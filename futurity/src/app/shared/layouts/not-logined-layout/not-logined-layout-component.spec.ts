@@ -4,7 +4,7 @@ import {NotLoginedLayoutComponent} from "./not-logined-layout.component";
 import {Location} from "@angular/common";
 import {RouterTestingModule} from "@angular/router/testing";
 import {LoginPageComponent} from "../../../login-page/login-page.component";
-import {RegisterEmailPageComponent} from "../../../register-email-page/register-email-page.component";
+import {RegisterEmailFormComponent} from "../../../register-email-page/register-email-form.component";
 
 describe("NotLoginedLayoutComponent", () => {
   let component: NotLoginedLayoutComponent;
@@ -15,7 +15,7 @@ describe("NotLoginedLayoutComponent", () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
         {path: "login", component: LoginPageComponent},
-        {path: "singup", component: RegisterEmailPageComponent}
+        {path: "singup", component: RegisterEmailFormComponent}
       ])],
       declarations: [NotLoginedLayoutComponent]
     })

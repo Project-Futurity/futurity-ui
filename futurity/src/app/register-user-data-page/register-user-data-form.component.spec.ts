@@ -2,12 +2,11 @@ import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
-import {RegisterUserDataPageComponent} from "./register-user-data-page.component";
+import {RegisterUserDataFormComponent} from "./register-user-data-form.component";
 import {By} from "@angular/platform-browser";
 import {sharedPasswordTest} from "../shared/tests/password-test";
 import {AvatarService} from "../shared/services/avatar.service";
-import {EmailService} from "../shared/services/email.service";
-import createSpy = jasmine.createSpy;
+import {HttpClientModule} from "@angular/common/http";
 
 interface FormTest {
   uploadFileInput: any;
@@ -21,26 +20,26 @@ interface FormTest {
 }
 
 describe("RegisterUserDataPageComponent", () => {
-  let component: RegisterUserDataPageComponent;
-  let fixture: ComponentFixture<RegisterUserDataPageComponent>;
+  let component: RegisterUserDataFormComponent;
+  let fixture: ComponentFixture<RegisterUserDataFormComponent>;
   let formTest: FormTest;
   let avatarService: AvatarService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule, FormsModule],
-      declarations: [RegisterUserDataPageComponent],
+      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule, FormsModule, HttpClientModule],
+      declarations: [RegisterUserDataFormComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.overrideComponent(RegisterUserDataPageComponent, {
+    fixture = TestBed.overrideComponent(RegisterUserDataFormComponent, {
       set: {
         providers: []
       }
-    }).createComponent(RegisterUserDataPageComponent);
+    }).createComponent(RegisterUserDataFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     let inputs = fixture.debugElement.nativeElement.querySelector("form").querySelectorAll("input");

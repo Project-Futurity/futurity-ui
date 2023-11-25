@@ -1,0 +1,55 @@
+<div class="container-fluid px-5 d-flex align-items-center justify-content-center mt-5 flex-wrap">
+  <div class="card mx-5 mb-5" *ngFor="let project of projects; let i = index;" [contextMenu]="basicMenu"
+       [contextMenuSubject]="project"
+       (click)="navigateToProject(project.project)"
+  >
+    <div class="card-img-top d-flex align-items-center justify-content-center">
+      <img class="preview" [src]="project.project.previewUrl" *ngIf="project.isPreviewLoad">
+      <div class="spinner-grow text-warning" role="status" *ngIf="!project.isPreviewLoad"></div>
+    </div>
+    <div class="card-body p-0">
+      <div class="card-title text-center w-100 py-1 mb-0">
+        <div class="text-nowrap overflow-hidden text-truncate cursor-pointer" *ngIf="changingProjectNameIndex !== i"
+             [ngClass]="{'px-3': project.project.name.length > DESCRIBED_TEXT_LENGTH}"
+             [ngbTooltip]="project.project.name.length > DESCRIBED_TEXT_LENGTH ? project.project.name : null"
+        >
+          {{project.project.name}}
+        </div>
+        <input type="text" class="box-input" [value]="project.project.name" *ngIf="changingProjectNameIndex === i"
+               (blur)="changeProjectName($event, i)"
+               (keyup.enter)="changeProjectName($event, i)"
+               (keyup.escape)="abortChangingProjectName()"
+               #input_project_name_change>
+      </div>
+      <div class="text-center p-2 overflow-auto h-75">
+        <div class="card-text-font" *ngIf="changingProjectDescriptionIndex !== i">{{project.project.description}}</div>
+        <textarea type="text" class="box-area" [value]="project.project.description"
+                  *ngIf="changingProjectDescriptionIndex === i"
+                  (blur)="changeProjectDescription($event, i)"
+                  (keyup.enter)="changeProjectDescription($event, i)"
+                  (keyup.escape)="abortChangingProjectDescription()"
+                  #input_project_description_change>
+        </textarea>
+      </div>
+    </div>
+  </div>
+  <div class="spinner-border" role="status" *ngIf="!projectsAreLoad"></div>
+
+  <div *ngIf="projects.length === 0 && projectsAreLoad">
+    <div class="text mt-3">You don't have any projects.
+      <a class="cursor-pointer" (click)="openCreationModal()">Do you want to create one?</a>
+    </div>
+  </div>
+</div>
+
+<button class="plus-button d-flex align-items-center justify-content-center position-fixed cursor-pointer"
+        (click)="openCreationModal()"
+>
+  <span class="plus-sign">+</span>
+</button>
+<context-menu>
+  <ng-template contextMenuItem (execute)="deleteProject($event.item)">Delete</ng-template>
+  <ng-template contextMenuItem (execute)="startChangingProjectName($event.item)">Change name</ng-template>
+  <ng-template contextMenuItem (execute)="startChangingProjectDescription($event.item)">Change description</ng-template>
+</context-menu>
+

@@ -1,8 +1,12 @@
 <div class="container-fluid p-4">
   <div class="card">
-    <form class="card-body d-flex flex-column align-items-center" [formGroup]="registerForm">
+    <form class="card-body d-flex flex-column align-items-center" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
-      <div class="avatar-wrapper mt-1 mt-sm-3">
+      <ngb-alert #alert class="text-center mb-0" [type]="alert.type" *ngIf="registrationInfo">
+        {{registrationInfo}}
+      </ngb-alert>
+
+      <div class="wrapper mt-1 mt-sm-3">
         <img class="avatar" [src]="getAvatar()">
         <div class="upload-file-button">
           <img class="avatar" src="assets/plus.png">
@@ -47,7 +51,8 @@
         <div class="term">></div>
 
         <span class="error-message"
-              *ngIf="registerForm.get('confirmPassword').touched && registerForm.errors?.notMatch"
+              *ngIf="registerForm.get('confirmPassword').touched && registerForm.get('confirmPassword').invalid &&
+              registerForm.get('confirmPassword').errors['notMatch']"
         >
           Passwords does not match
         </span>
@@ -61,7 +66,7 @@
 
       <div class="mb-1 mb-sm-3 mt-3 mt-sm-4">
         <button type="submit" class="btn mx-0"
-                [disabled]="registerForm.invalid"
+                [disabled]="registerForm.invalid || disableRegisterButton"
                 [ngStyle]="{
                   'pointer-events': registerForm.invalid ? 'none' : 'auto'
                 }">

@@ -3,10 +3,11 @@ import {LoginPageComponent} from "./login-page.component";
 import {AbstractControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import {Location} from "@angular/common";
-import {RegisterEmailPageComponent} from "../register-email-page/register-email-page.component";
+import {RegisterEmailFormComponent} from "../register-email-page/register-email-form.component";
 import {RouterTestingModule} from "@angular/router/testing";
 import {sharedPasswordTest} from "../shared/tests/password-test";
 import {sharedEmailTest} from "../shared/tests/email-test";
+import {HttpClientModule} from "@angular/common/http";
 
 interface FormTest {
   emailInput: any;
@@ -25,8 +26,8 @@ describe("LoginPageComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
-        {path: "singup", component: RegisterEmailPageComponent}
-      ]), ReactiveFormsModule, FormsModule],
+        {path: "singup", component: RegisterEmailFormComponent}
+      ]), ReactiveFormsModule, FormsModule, HttpClientModule],
       declarations: [LoginPageComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

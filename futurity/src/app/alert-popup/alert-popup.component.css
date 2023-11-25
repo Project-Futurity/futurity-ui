@@ -1,0 +1,35 @@
+:host ::ng-deep .modal-dialog {
+  margin: auto !important;
+}
+
+.modal-header {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.modal-footer, .project-form {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.modal-header, .modal-footer {
+  border-color: #FFFF00;
+  background: #232129;
+}
+
+.text {
+  color: #FFFF00;
+  font-size: 22px;
+}
+
+.btn {
+  width: 160px;
+}
+
+@media (max-width: 576px) {
+  ::ng-deep .modal-dialog {
+    width: 300px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}

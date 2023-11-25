@@ -1,0 +1,73 @@
+.modal-header {
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+}
+
+.modal-footer {
+  border-bottom-left-radius: 35px;
+  border-bottom-right-radius: 35px;
+}
+
+.modal-header, .modal-footer {
+  border: none;
+  background: rgb(70, 70, 70);
+}
+
+.text {
+  color: #dadada;
+  font-size: 24px;
+}
+
+.date-picker {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: transparent;
+  border-left: 1px solid #1b1e21;
+  border-bottom: 1px solid #1b1e21;
+  border-top: 1px solid #1b1e21;
+  border-right: none;
+  outline: none;
+  width: 60%;
+  text-align: center;
+  cursor: pointer;
+  font-size: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #dadada;
+}
+
+.append {
+  border-right: 1px solid #1b1e21;
+  border-bottom: 1px solid #1b1e21;
+  border-top: 1px solid #1b1e21;
+  border-left: none;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  width: 30px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+input::placeholder {
+  color: rgba(218, 218, 218, 0.39);
+}
+
+::ng-deep .owl-dt-container {
+  background: #909091;
+}
+
+::ng-deep .owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+  background: #404649;
+}
+
+::ng-deep .owl-dt-control-button-content, .owl-dt-control-button-content {
+  color: #212325;
+}
+
+::ng-deep .owl-dt-timer-input {
+  background: transparent;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
+}
