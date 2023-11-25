@@ -12,4 +12,4 @@ RUN rm -rf ./*
 COPY nginx.conf nginx.conf.template
 COPY --from=builder /app/dist/futurity .
 
-ENTRYPOINT ["/bin/sh" , "-c" , "envsubst '${API_GATEWAY}' < ./nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
+ENTRYPOINT ["/bin/sh" , "-c" , "envsubst '${API_GATEWAY}' '${TELEGRAM_BOT_URL}' < ./nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
